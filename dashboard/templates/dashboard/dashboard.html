@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Dashboard</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Total Income: ${{ total_income }}</h5>
+                <h5>Total Expenses: ${{ total_expenses }}</h5>
+                <h5>Remaining Balance: ${{ balance }}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Buttons to view entries and add a new entry -->
+<div class="mb-3">
+    <a href="{% url 'finance:entry-list' %}" class="btn btn-primary">View Entry List</a>
+    <a href="{% url 'finance:entry-create' %}" class="btn btn-success">Add New Entry</a>
+</div>
+
+<canvas id="pieChart" width="400" height="400"></canvas>
+<canvas id="barChart" width="400" height="400"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+var ctx1 = document.getElementById('pieChart').getContext('2d');
+var pieChart = new Chart(ctx1, {
+    type: 'pie',
+    data: {
+        labels: {{ categories|safe }},
+        datasets: [{
+            label: 'Expenses by Category',
+            data: {{ amounts|safe }},
+            backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56', '#2ecc71'],
+        }]
+    }
+});
+
+var ctx2 = document.getElementById('barChart').getContext('2d');
+var barChart = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+        labels: {{ months|safe }},
+        datasets: [
+            {
+                label: 'Income',
+                backgroundColor: '#2ecc71',
+                data: {{ monthly_income|safe }}
+            },
+            {
+                label: 'Expenses',
+                backgroundColor: '#e74c3c',
+                data: {{ monthly_expenses|safe }}
+            }
+        ]
+    }
+});
+</script>
+{% endblock %}

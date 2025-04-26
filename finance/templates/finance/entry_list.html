@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Your Entries</h2>
+<a href="{% url 'finance:entry-create' %}" class="btn btn-primary mb-3">Add New Entry</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Notes</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in entries %}
+        <tr>
+            <td>{{ entry.title }}</td>
+            <td>${{ entry.amount }}</td>
+            <td>{{ entry.date }}</td>
+            <td>{{ entry.type_display }}</td>
+            <td>{{ entry.category }}</td>
+            <td>{{ entry.notes }}</td>
+            <td>
+                <a href="{% url 'finance:entry-update' entry.id %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'finance:entry-delete' entry.id %}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
