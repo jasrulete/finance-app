@@ -1,0 +1,98 @@
+/* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body and container styles */
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #6a1b9a, #8e24aa);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: white;
+}
+
+.container {
+  text-align: center;
+  padding: 20px;
+}
+
+.card {
+  background-color: #210535;
+  padding: 50px 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  max-width: 90%;
+}
+
+/* Heading styles */
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+/* Tagline styles */
+.tagline {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  color: #cccccc;
+}
+
+/* Image styles */
+.icon {
+  width: 120px;
+  height: auto;
+  margin-bottom: 30px;
+}
+
+.logo-icon {
+    width: 350px;
+    height: auto;
+    margin-bottom: 30px;
+  }
+
+/* Button container */
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+    gap: 20%;
+  margin-bottom: 30px;
+}
+
+/* Button styles */
+.button {
+  display: inline-block;
+    padding: 12px 24px;
+  font-size: 1rem;
+  text-decoration: none;
+  color: white;
+  background-color: #ff6b6b;
+  border: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.button.secondary {
+  background-color: #4caf50;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  background-color: #ff4d4d;
+}
+
+.button.secondary:hover {
+  background-color: #43a047;
+}
+
+/* Copyright styles */
+.copyright {
+  font-size: 0.75rem;
+  color: #aaaaaa;
+}
