@@ -7,7 +7,7 @@
 
 /* Body */
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "K2D", sans-serif;
   background: linear-gradient(135deg, #6a1b9a, #8e24aa);
   display: flex;
   justify-content: center;
@@ -28,8 +28,8 @@ body {
 
 /* Left Panel */
 .left-panel {
-  background-color: #2e003e;
-  color: white;
+  background-color: var(--secondary);
+  color: var(--white);
   flex: 1;
   padding: 40px 20px;
   text-align: center;
@@ -46,7 +46,7 @@ body {
 .tagline {
   font-size: 0.95rem;
   margin-bottom: 30px;
-  color: #cccccc;
+  color: var(--white);
 }
 
 .icon {
@@ -63,12 +63,12 @@ body {
 .copyright {
   font-size: 0.75rem;
   margin-top: 30px;
-  color: #aaaaaa;
+  color: var(--white);
 }
 
 /* Right Panel */
 .right-panel {
-  background-color: #f8d7f5;
+  background-color: var(--light-primary);
   flex: 1;
   padding: 50px 30px;
   display: flex;
@@ -91,7 +91,7 @@ body {
 
 label {
   font-size: 0.9rem;
-  color: #333;
+  color: var(--dark-text);
   margin-bottom: 5px;
 }
 
@@ -100,23 +100,24 @@ input {
   margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  background-color: #ffe4f2;
+  background-color: var(--light-secondary);
   font-size: 1rem;
 }
 
 input:focus {
   outline: none;
-  border-color: #6a1b9a;
+  border-color: var(--secondary);
 }
 
 /* Button */
 .button {
   padding: 12px;
-  background-color: #6a1b9a;
-  color: white;
+  background-color: var(--secondary);
+  color: var(--white);
   border: none;
   border-radius: 8px;
   font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -129,12 +130,15 @@ input:focus {
 .signup-link {
   text-align: center;
   margin-top: 20px;
+  font-style: italic;
   font-size: 0.9rem;
+  color: var(--dark-text);
 }
 
 .signup-link a {
-  color: #6a1b9a;
   text-decoration: none;
+  color: var(--dark-text);
+  font-weight: 700;
 }
 
 .signup-link a:hover {

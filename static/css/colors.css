@@ -1,0 +1,30 @@
+/* Global Color Variables */
+:root {
+    --primary: #7b337d;
+    --secondary: #210535;
+    --light-primary: #f5d5e0;
+    --light-secondary: #f4c4d4;
+    --white: #ffffff;
+  
+    --text: #ffffff;
+    --dark-text: #210535;
+    --muted-text: #ffffff80;
+  
+    --green: #77dd77;
+    --red: #ff6961;
+    --yellow: #ffee8c;
+    --button-gray: #b0b0b0;
+  
+    --bills: #e7d7ca;
+    --grocery: #d5f6fb;
+    --food: #f6f3a9;
+    --health: #f1beb5;
+    --eating-out: #e7d27c;
+    --transpo: #d5d1e9;
+    --gifts: #f8c57c;
+  
+    --budget-card: #2f1045;
+    --icon-container: #210535;
+    --status-bar: #1f092e;
+    --record-card: #c874b2;
+  }
