@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BudgetWise - Sign Up</title>
+    <link rel="stylesheet" href="register.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="left-panel">
+        <h1>BUDGETWISE</h1>
+        <p class="tagline">
+          Take control of your finances, track your income and expenses, and
+          stay on top of your budget.
+        </p>
+        <img
+          src="../../pics/mockLogo.png"
+          alt="Budget Icon"
+          class="logo-icon"
+        />
+        <p class="copyright">&copy; 2025 BudgetWise. All rights reserved.</p>
+      </div>
+
+      <div class="right-panel">
+        <h2>Create Your Account</h2>
+        <form action="/register" method="POST" class="form">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required />
+
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required />
+
+          <label for="confirm-password">Confirm Password</label>
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm-password"
+            required
+          />
+
+          <button type="submit" class="button">Sign Up</button>
+        </form>
+
+        <p class="login-link">
+          Already have an account?
+          <a
+            href="../login/login.html"
+            >Log In</a
+          >
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
