@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+
+  <!-- CSS file link (optional) -->
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="/static/css/colors.css">
+
+  <!-- Google Font (K2D) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wdth@75..125&family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" 
+    rel="stylesheet"
+  >
+
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">
+        <img src="/pics/mockLogo.png" alt="BudgetWise Logo" class="logo-img">
+      </div>
+      <div class="logo-text">BudgetWise</div>
+    </div>
+    <div class="user-profile">
+      <div class="user-avatar">
+        <img src="../../pics/user.png" alt="User Avatar" class="avatar-image">
+      </div>
+      <div class="user-info">
+        <span class="user-name">John Doe</span>
+        <span class="logout-link">Log Out</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <sidebar class="sidebar">
+        <div class="menu-item active">
+        <div class="menu-icon">
+            <span class="material-icons">dashboard</span>
+        </div>
+        <span>Dashboard</span>
+        </div>
+        <div class="menu-item">
+        <div class="menu-icon">
+            <span class="material-icons">payments</span>
+        </div>
+        <span>Expenses</span>
+        </div>
+        <div class="menu-item">
+        <div class="menu-icon">
+            <span class="material-icons">work_history</span>
+        </div>
+        <span>Transactions</span>
+        </div>
+        <div class="menu-item">
+        <div class="menu-icon">
+            <span class="material-icons">file_download</span>
+        </div>
+        <span>Export</span>
+        </div>
+    </sidebar>
+
+    <div class="main-content">
+        <div class="welcome-message">
+        <h1>Welcome, John Doe!</h1>
+        <p>
+            Manage your finances easily. Here's your budget summary for April.
+        </p>
+        </div>
+
+        <div class="summary-container">
+            <div class="summary-card">
+                <div class="circle-progress income">
+                    <div class="circle-inner"></div>
+                </div>
+                <div class="summary-info">
+                    <div class="amount">PHP 9999.99</div>
+                    <div class="label">Total Income</div>
+                </div>
+            </div>
+            
+            <div class="summary-card">
+                <div class="circle-progress expense">
+                    <div class="circle-inner"></div>
+                </div>
+                <div class="summary-info">
+                    <div class="amount">PHP 9999.99</div>
+                    <div class="label">Total Expense</div>
+                </div>
+            </div>
+            
+            <div class="summary-card">
+                <div class="circle-progress balance">
+                    <div class="circle-inner"></div>
+                </div>
+                <div class="summary-info">
+                    <div class="amount">PHP 9999.99</div>
+                    <div class="label">Remaining Balance</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-container">
+          <h2>Financial Overview this Year</h2>
+          <div class="overview-cards">
+            <div class="income-overview">
+                <div class="title">
+                <span class="material-icons">attach_money</span>
+                <h4>Income</h4>
+                </div>
+                <div class="overview-amount">
+                <span class="material-icons income">php</span>
+                50,000
+                </div>
+            </div>
+
+            <div class="expense-overview">
+                <div class="title">
+                <span class="material-icons">receipt_long</span>
+                <h4>Expense</h4>
+                </div>
+                <div class="overview-amount">
+                <span class="material-icons expense">php</span>
+                50,000
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
