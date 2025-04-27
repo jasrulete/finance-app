@@ -7,13 +7,13 @@
 
 /* Body and container styles */
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "K2D", sans-serif;
   background: linear-gradient(135deg, #6a1b9a, #8e24aa);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  color: white;
+  color: var(--white);
 }
 
 .container {
@@ -22,7 +22,7 @@ body {
 }
 
 .card {
-  background-color: #2e003e;
+  background-color: var(--secondary);
   padding: 50px 30px;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
@@ -54,33 +54,33 @@ h1 {
     width: 350px;
     height: auto;
     margin-bottom: 30px;
-  }
+}
 
 /* Button container */
 .buttons {
   display: flex;
   flex-direction: row;
   justify-content: center;
-    gap: 20%;
+  gap: 20%;
   margin-bottom: 30px;
 }
 
 /* Button styles */
 .button {
   display: inline-block;
-    padding: 12px 24px;
+  padding: 12px 24px;
   font-size: 1rem;
   text-decoration: none;
-  color: white;
-  background-color: #6a1b9a;
+  color: var(--white);
+  background-color: var(--primary);
   border: none;
   border-radius: 8px;
   transition: all 0.3s ease;
 }
 
 .button.secondary {
-  background-color: #ffffff00;
-  border: white 1px solid;
+  background-color: var(--secondary);
+  border: var(--white) 1px solid;
 }
 
 .button:hover {
@@ -89,11 +89,11 @@ h1 {
 }
 
 .button.secondary:hover {
-  background-color: #43a047;
+  background-color: var(--green);
 }
 
 /* Copyright styles */
 .copyright {
   font-size: 0.75rem;
-  color: #aaaaaa;
+  color: var(--text);
 }
