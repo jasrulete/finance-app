@@ -118,62 +118,45 @@
     padding-bottom: 10px;
 }
 
-/* Summary Cards */
-.summary-container {
+/* Summary Charts */
+.dashboard-container {
     display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
+    justify-content: center;
+    align-items: center;
     background-color: var(--secondary);
     border-radius: 25px;
+    margin-bottom: 20px;
+    padding: 20px 40px;
+    gap: 80px;
 }
-  
-.summary-card {
-    flex: 1;
-    padding: 20px 0px;
+
+.chart-item {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 20px;
+    min-width: 280px;
 }
-  
-.circle-progress {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+.chart-wrapper {
+    width: 60px;
+    height: 60px;
+    margin-right: 15px;
 }
-  
-.circle-progress.income {
-    background: conic-gradient(#4caf50 0% 75%, transparent 75% 100%);
+
+.chart-text {
+    color: white;
 }
-  
-.circle-progress.expense {
-    background: conic-gradient(#ff6b6b 0% 75%, transparent 75% 100%);
-}
-  
-.circle-progress.balance {
-    background: conic-gradient(#ffd166 0% 75%, transparent 75% 100%);
-}
-  
-.circle-inner {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: #240e36;
-}
-  
-.summary-info {
-    display: flex;
-    flex-direction: column;
-    color: var(--white);
+
+.amount {
     font-size: 1.25rem;
+    font-weight: bold;
+    margin: 0;
+    line-height: 1.3;
 }
-  
+
 .label {
-    font-weight: 500;
+    font-size: 1rem;
+    margin: 0;
+    opacity: 0.9;
 }
 
 .overview-container {

@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
 
-  <!-- CSS file link (optional) -->
+  <!-- CSS file link -->
   <link rel="stylesheet" href="dashboard.css">
   <link rel="stylesheet" href="/static/css/colors.css">
+  <!-- Import JS file -->
+  <script src="charts.js"></script>
 
   <!-- Google Font (K2D) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,6 +20,10 @@
 
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Import Chart.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  
 </head>
 <body>
 
@@ -75,34 +81,37 @@
         </p>
         </div>
 
-        <div class="summary-container">
-            <div class="summary-card">
-                <div class="circle-progress income">
-                    <div class="circle-inner"></div>
+        <div class="dashboard-container">
+            <!-- Income Chart -->
+            <div class="chart-item">
+                <div class="chart-wrapper">
+                    <canvas id="incomeChart"></canvas>
                 </div>
-                <div class="summary-info">
-                    <div class="amount">PHP 9999.99</div>
-                    <div class="label">Total Income</div>
-                </div>
-            </div>
-            
-            <div class="summary-card">
-                <div class="circle-progress expense">
-                    <div class="circle-inner"></div>
-                </div>
-                <div class="summary-info">
-                    <div class="amount">PHP 9999.99</div>
-                    <div class="label">Total Expense</div>
+                <div class="chart-text">
+                    <p class="amount">PHP 9999.99</p>
+                    <p class="label">Total Income</p>
                 </div>
             </div>
-            
-            <div class="summary-card">
-                <div class="circle-progress balance">
-                    <div class="circle-inner"></div>
+    
+            <!-- Expense Chart -->
+            <div class="chart-item">
+                <div class="chart-wrapper">
+                    <canvas id="expenseChart"></canvas>
                 </div>
-                <div class="summary-info">
-                    <div class="amount">PHP 9999.99</div>
-                    <div class="label">Remaining Balance</div>
+                <div class="chart-text">
+                    <p class="amount">PHP 9999.99</p>
+                    <p class="label">Total Expense</p>
+                </div>
+            </div>
+    
+            <!-- Balance Chart -->
+            <div class="chart-item">
+                <div class="chart-wrapper">
+                    <canvas id="balanceChart"></canvas>
+                </div>
+                <div class="chart-text">
+                    <p class="amount">PHP 9999.99</p>
+                    <p class="label">Remaining Balance</p>
                 </div>
             </div>
         </div>
