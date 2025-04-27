@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BudgetWise - Transactions</title>
+  <link rel="stylesheet" href="transaction.css">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">
+      <img src="../../pics/mockLogo.png" alt="BudgetWise Logo">
+      <h2>BudgetWise</h2>
+    </div>
+    <nav>
+      <a href="/dashboard">
+        <img src="../../pics/dashboard.png" alt="Dashboard Icon">
+        Dashboard</a>
+      <a href="/expenses">
+        <img src="../../pics/expenses.png" alt="Expenses Icon">
+        Expenses</a>
+      <a href="/transactions">
+        <img src="../../pics/transactions.png" alt="Dashboard Icon">
+        Transactions</a>
+      <a href="/export">
+        <img src="../../pics/export.png" alt="Dashboard Icon">
+        Export</a>
+    </nav>
+  </div>
+
+  <div class="main-content">
+    <header>
+      <div class="user-info">
+        <img src="../../pics/user.png" alt="User Profile" class="profile-pic">
+        <div>
+          <p class="username">John Doe</p>
+          <a href="/logout" class="logout">Log Out</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="transactions-section">
+      <h1>Transactions</h1>
+      <p class="subtitle">Easily review and manage your financial history.</p>
+
+      <div class="transactions-block">
+        <h2 class="block-title">
+          <img src="../../pics/income.png" alt="Income Icon" class="block-icon">
+          Income</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Example Rows -->
+            <tr>
+              <td>Salary</td>
+              <td>Salary</td>
+              <td>08 Apr 2025</td>
+              <td>PHP 999,999.99</td>
+              <td>For the month of January asda   da dasd ad as ada ad as dasd as dsadasda d</td>
+              <td class="actions">
+                <button>Edit</button>
+                <button>Delete</button>
+              </td>
+            </tr>
+            <!-- Repeat more rows here -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="transactions-block">
+        <h2 class="block-title">
+          <img src="../../pics/expense-list.png" alt="Expenses Icon" class="block-icon">
+          Expenses</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Jollibee</td>
+              <td>Eating Out</td>
+              <td>08 Apr 2025</td>
+              <td>PHP 999,999.99</td>
+              <td>Got Hungry</td>
+              <td class="actions">
+                <button>Edit</button>
+                <button>Delete</button>
+              </td>
+            </tr>
+            <!-- Repeat more rows here -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
