@@ -8,7 +8,7 @@
 /* Body and container styles */
 body {
   font-family: "K2D", sans-serif;
-  color: var(--white);
+  color: white;
 }
 
 .container {
@@ -20,9 +20,10 @@ body {
 }
 
 .card {
+  background-color: #210535;
   background-color: var(--secondary);
   text-align: center;
-  padding: 70px 90px 40px;
+  padding: 70px 30px 40px;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   max-width: 90%;
@@ -36,10 +37,18 @@ h1 {
 }
 
 /* Tagline styles */
+.tagline-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  margin: 0 auto 20px;
+}
+
 .tagline {
   font-size: 1.25rem;
   line-height: 1.6;
-  margin-bottom: 20px;
+  color: #ffffff80;
   color: var(--muted-text);
 }
 
@@ -62,7 +71,7 @@ h1 {
 /* Button styles */
 .button {
   display: inline-block;
-  color: var(--white);
+  color: white;
   background-color: var(--primary);
   width: 150px;
   max-height: 50px;
@@ -75,8 +84,9 @@ h1 {
 }
 
 .button.secondary {
+  background-color: #210535;
   background-color: var(--secondary);
-  border: var(--white) 1px solid;
+  border: white 1px solid;
 }
 
 .button:hover {
@@ -85,8 +95,10 @@ h1 {
 }
 
 .button.secondary:hover {
-  background-color: var(--white);
+  background-color: white;
+  color: #210535;
   color: var(--secondary);
+  border: #210535 1px solid;
   border: var(--secondary) 1px solid;
 }
 
@@ -94,5 +106,32 @@ h1 {
 .copyright {
   font-size: 0.7rem;
   font-weight: 100;
+  color: white;
   color: var(--text);
+}
+
+/* Responsive styles */
+@media (max-width: 767px) {
+  h1 {
+    font-size: 2.7rem;
+  }
+
+  .tagline {
+    font-size: 1rem;
+  }
+
+  .logo-icon {
+    width: 150px;
+  }
+
+  .buttons {
+    gap: 40px;
+    margin-bottom: 20px;
+  }
+
+  .button {
+    width: 130px;
+    height: auto;
+    font-size: 1.2rem;
+  }
 }

@@ -1,10 +1,74 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BudgetWise - Sign Up</title>
 
-{% block content %}
-<h2>Sign Up</h2>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Sign Up</button>
-</form>
-{% endblock %}
+  <link rel="stylesheet" href="{% static 'pages/register/register.css' %}">
+  <link rel="stylesheet" href="{% static 'css/colors.css' %}">
+
+  <!-- Google Font (K2D) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wdth@75..125&family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    <div class="left-panel">
+      <h1>BUDGETWISE</h1>
+      <p class="tagline">
+        Take control of your finances,
+        track your income and expenses,
+        and stay on top of your budget.
+      </p>
+      <img
+        src="{% static 'pics/mocklogo.png' %}"
+        alt="Budget Icon"
+        class="logo-icon"
+      />
+      <p class="copyright">&copy; 2025 BudgetWise. All rights reserved.</p>
+    </div>
+
+    <div class="right-panel">
+      <h2>Track Your Finance Now!</h2>
+
+      <form method="POST" action="{% url 'signup' %}" class="form">
+        {% csrf_token %}
+
+        <!-- Show form non-field errors -->
+        {% if form.non_field_errors %}
+          <div class="error">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+
+        <!-- Username -->
+        <label for="{{ form.username.id_for_label }}">Username</label>
+        {{ form.username }}
+
+        <!-- Email -->
+        <label for="{{ form.email.id_for_label }}">Email</label>
+        {{ form.email }}
+
+        <!-- Password -->
+        <label for="{{ form.password1.id_for_label }}">Password</label>
+        {{ form.password1 }}
+
+        <!-- Confirm Password -->
+        <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+        {{ form.password2 }}
+
+        <button type="submit" class="button">Sign Up</button>
+      </form>
+
+      <p class="login-link">
+        Already have an account?
+        <a href="{% url 'login' %}">Log In</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>
