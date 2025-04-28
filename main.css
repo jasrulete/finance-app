@@ -23,7 +23,7 @@ body {
   background-color: #210535;
   background-color: var(--secondary);
   text-align: center;
-  padding: 70px 90px 40px;
+  padding: 70px 30px 40px;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   max-width: 90%;
@@ -37,10 +37,17 @@ h1 {
 }
 
 /* Tagline styles */
+.tagline-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  margin: 0 auto 20px;
+}
+
 .tagline {
   font-size: 1.25rem;
   line-height: 1.6;
-  margin-bottom: 20px;
   color: #ffffff80;
   color: var(--muted-text);
 }
