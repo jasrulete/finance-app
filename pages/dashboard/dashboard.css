@@ -92,6 +92,11 @@
     padding: 10px 20px;
 }
 
+.menu-item:hover {
+    background-color: var(--hover-menu-item);
+    border-radius: 10px;
+}
+
 .menu-icon {
     height: 24px;
     width: 24px;
