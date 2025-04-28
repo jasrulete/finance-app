@@ -48,18 +48,22 @@
         <!-- Username -->
         <label for="{{ form.username.id_for_label }}">Username</label>
         {{ form.username }}
+        {{ form.username.errors }}
 
         <!-- Email -->
         <label for="{{ form.email.id_for_label }}">Email</label>
         {{ form.email }}
+        {{ form.email.errors }}
 
         <!-- Password -->
         <label for="{{ form.password1.id_for_label }}">Password</label>
         {{ form.password1 }}
+        {{ form.password1.errors }}
 
         <!-- Confirm Password -->
         <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
         {{ form.password2 }}
+        {{ form.password2.errors }}
 
         <button type="submit" class="button">Sign Up</button>
       </form>
