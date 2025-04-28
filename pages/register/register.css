@@ -23,6 +23,7 @@ body {
   overflow: hidden;
   width: 1000px;
   max-width: 95%;
+  height: auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
@@ -147,4 +148,95 @@ input:focus {
 
 .login-link a:hover {
   text-decoration: underline;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .container {
+    width: 90%;
+  }
+
+  .left-panel h1 {
+    font-size: 2.5rem;
+  }
+
+  .tagline {
+    width: 75%;
+    font-size: 0.9rem;
+  }
+
+  .logo-icon {
+    width: 200px;
+  }
+
+  .right-panel {
+    padding: 30px 20px;
+  }
+
+  .right-panel h2 {
+    font-size: 1.8rem;
+  }
+
+  label {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+  }
+
+  input {
+    padding: 8px;
+    font-size: 1.1rem;
+  }
+
+  .button {
+    padding: 10px;
+    margin-top: 15px;
+    font-size: 1.3rem;
+  }
+
+  .login-link {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .left-panel h1 {
+    font-size: 2.3rem;
+  }
+
+  .tagline {
+    font-size: 0.8rem;
+  }
+
+  .logo-icon {
+    width: 150px;
+  }
+
+  .copyright {
+    font-size: 0.7rem;
+  }
+
+  .right-panel h2 {
+    margin-bottom: 40px;
+  }
+
+  label {
+    font-size: 1rem;
+  }
+
+  input {
+    padding: 8px;
+    font-size: 1rem;
+  }
+
+  .button {
+    padding: 10px;
+    margin-top: 15px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 588px) {
+  .container {
+    flex-direction: column;
+  }
 }
