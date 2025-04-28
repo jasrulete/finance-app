@@ -8,7 +8,7 @@
 /* Body and container styles */
 body {
   font-family: "K2D", sans-serif;
-  color: var(--white);
+  color: white;
 }
 
 .container {
@@ -20,6 +20,7 @@ body {
 }
 
 .card {
+  background-color: #210535;
   background-color: var(--secondary);
   text-align: center;
   padding: 70px 90px 40px;
@@ -40,6 +41,7 @@ h1 {
   font-size: 1.25rem;
   line-height: 1.6;
   margin-bottom: 20px;
+  color: #ffffff80;
   color: var(--muted-text);
 }
 
@@ -62,7 +64,7 @@ h1 {
 /* Button styles */
 .button {
   display: inline-block;
-  color: var(--white);
+  color: white;
   background-color: var(--primary);
   width: 150px;
   max-height: 50px;
@@ -75,8 +77,9 @@ h1 {
 }
 
 .button.secondary {
+  background-color: #210535;
   background-color: var(--secondary);
-  border: var(--white) 1px solid;
+  border: white 1px solid;
 }
 
 .button:hover {
@@ -85,8 +88,10 @@ h1 {
 }
 
 .button.secondary:hover {
-  background-color: var(--white);
+  background-color: white;
+  color: #210535;
   color: var(--secondary);
+  border: #210535 1px solid;
   border: var(--secondary) 1px solid;
 }
 
@@ -94,5 +99,6 @@ h1 {
 .copyright {
   font-size: 0.7rem;
   font-weight: 100;
+  color: white;
   color: var(--text);
 }
