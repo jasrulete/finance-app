@@ -33,6 +33,10 @@
     color: var(--white);
 }
 
+#toggle-sidebar {
+    cursor: pointer;
+}
+
 .user-profile {
     display: flex;
     flex-direction: row;
@@ -63,7 +67,7 @@
 .container {
     display: flex;
     flex-direction: row;
-    height: 100vh;
+    height: 100%;
     width: 100%;
 }
 
@@ -72,8 +76,9 @@
     flex-direction: column;
     padding: 20px;
     background-color: var(--secondary);
-    height: 100%;
-    width: 35vh;
+    height: auto;
+    width: 250px;
+    left: -250px;
 }
 
 .menu-item {
@@ -98,18 +103,23 @@
     color: var(--dark-text);
 }
 
+/* Show sidebar when 'active' class is added */
+.sidebar.active {
+    transform: translateX(250px); /* Slide in from the left */
+}
+
 .main-content {
     display: flex;
     flex-direction: column;
     padding: 20px 40px;
     background-color: var(--primary);
     height: 100%;
-    width: calc(100% - 35vh);
+    width: calc(100% - 250px);
 }
 
 .welcome-message {
     color: var(--light-primary);
-    padding-bottom: 20px;
+    padding-bottom: 40px;
 }
 
 .welcome-message h1 {
@@ -119,13 +129,14 @@
 }
 
 /* Summary Charts */
-.dashboard-container {
+.dashboard-grid {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     background-color: var(--secondary);
     border-radius: 25px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     padding: 20px 40px;
     gap: 80px;
 }
@@ -133,7 +144,7 @@
 .chart-item {
     display: flex;
     align-items: center;
-    min-width: 280px;
+    min-width: 200px;
 }
 
 .chart-wrapper {
@@ -161,7 +172,7 @@
 
 .overview-container {
     gap: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     background-color: var(--secondary);
     border-radius: 25px;
 }
@@ -209,4 +220,168 @@
 .overview-amount {
     font-size: 2.5rem;
     font-weight: 500;
+}
+
+.chart-container {
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 40px;
+}
+
+h2 {
+    color: white;
+    font-size: 18px;
+    margin-top: 0;
+}
+
+.budget-container {
+    padding: 30px 40px;
+    background-color: var(--secondary);
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.budget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.budget-header h1 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: var(--white);
+}
+
+.material-icons {
+    cursor: pointer;
+}
+
+.material-icons.white {
+    font-size: 2.25rem;
+    color: var(--white);
+}
+
+.material-icons.overall { color: var(--white); }
+.material-icons.bills { color: var(--bills); }
+.material-icons.grocery { color: var(--grocery); }
+.material-icons.food { color: var(--food); }
+.material-icons.health { color: var(--health); }
+.material-icons.eating { color: var(--eating-out); }
+.material-icons.transpo { color: var(--transpo); }
+.material-icons.gifts { color: var(--gifts); }
+
+.budget-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.budget-item {
+    background-color: var(--budget-card);
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background-color: var(--icon-container);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.budget-info {
+    flex-grow: 1;
+}
+
+.budget-title {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    color: var(--white);
+}
+
+.progress-container {
+    height: 8px;
+    background-color: var(--status-bar);
+    border-radius: 4px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.progress-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+/* Progress bar colors */
+.overall .progress-bar { background-color: var(--white); }
+.bills .progress-bar { background-color: var(--bills); }
+.grocery .progress-bar { background-color: var(--grocery); }
+.food .progress-bar { background-color: var(--food); }
+.health .progress-bar { background-color: var(--health); }
+.eating-out .progress-bar { background-color: var(--eating-out); }
+.transportation .progress-bar { background-color: var(--transpo); }
+.gifts .progress-bar { background-color: var(--gifts); }
+
+/* Responsive design */
+@media (min-width: 992px) {
+    .icon {
+        width: 45px;
+        height: 45px;
+    }
+
+    .budget-title {
+        font-size: 1rem;
+    }
+
+    .progress-container {
+        height: 5px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-250px); /* Sidebar is hidden off-screen on small devices */
+    }
+    
+    /* Adjust container when sidebar is active */
+    .main-content {
+        width: 100%; /* Full width when sidebar is hidden */
+    }
+
+    .dashboard-grid {
+        padding: 20px;
+        gap: 20px;
+    }
+    .chart-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    .chart-wrapper {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .budget-header h1 {
+        font-size: 2rem;
+    }
+
+    .material-icons.white {
+        font-size: 2rem;
+    }
+
+    .budget-grid {
+        grid-template-columns: 1fr;
+    }
 }

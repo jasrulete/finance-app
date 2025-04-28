@@ -30,7 +30,7 @@
   <header class="header">
     <div class="logo">
       <div class="logo-icon">
-        <img src="/pics/mockLogo.png" alt="BudgetWise Logo" class="logo-img">
+        <img src="/pics/mockLogo.png" alt="BudgetWise Logo" class="logo-img" id="toggle-sidebar">
       </div>
       <div class="logo-text">BudgetWise</div>
     </div>
@@ -81,7 +81,7 @@
         </p>
         </div>
 
-        <div class="dashboard-container">
+        <div class="dashboard-grid">
             <!-- Income Chart -->
             <div class="chart-item">
                 <div class="chart-wrapper">
@@ -140,6 +140,116 @@
                 50,000
                 </div>
             </div>
+          </div>
+          <div class="chart-container">
+            <div class="barchart-wrapper" style="height: 300px; margin-top: 20px;">
+                <canvas id="monthlyComparisonChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="budget-container">
+          <div class="budget-header">
+            <h1>My Budgets</h1>
+            <span class="material-icons white">more_vert</span>
+          </div>
+          
+          <div class="budget-grid">
+              <div class="budget-item overall">
+                  <div class="icon">
+                    <span class="material-icons overall">account_balance_wallet</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Overall Budget</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="65"></div>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="budget-item bills">
+                  <div class="icon">
+                    <span class="material-icons bills">receipt</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Bills</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="70"></div>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="budget-item grocery">
+                  <div class="icon">
+                    <span class="material-icons grocery">shopping_cart</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Grocery</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="50"></div>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="budget-item food">
+                  <div class="icon">
+                    <span class="material-icons food">food_bank</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Food</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="75"></div>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="budget-item health">
+                  <div class="icon">
+                    <span class="material-icons health">health_and_safety</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Health</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="40"></div>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="budget-item eating-out">
+                  <div class="icon">
+                    <span class="material-icons eating">fastfood</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Eating Out</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="65"></div>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="budget-item transportation">
+                  <div class="icon">
+                    <span class="material-icons transpo">directions_bus</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Transportation</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="55"></div>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="budget-item gifts">
+                  <div class="icon">
+                    <span class="material-icons gifts">redeem</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Gifts</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="70"></div>
+                      </div>
+                  </div>
+              </div>
           </div>
         </div>
     </div>
