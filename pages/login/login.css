@@ -46,6 +46,8 @@ body {
 }
 
 .tagline {
+  width: 55%;
+  margin: 0 auto;
   font-size: 1rem;
   margin-bottom: 20px;
   color: var(--white);
@@ -124,7 +126,7 @@ input:focus {
 }
 
 .button:hover {
-  background-color: var(--hover-secondary);
+  background-color: var(--light-primary);
   color: var(--dark-text);
   box-shadow: inset 0 0 0 2px var(--dark-text);
 }
