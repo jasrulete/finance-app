@@ -51,6 +51,8 @@ body {
   display: flex;
   align-items: center;
   margin-bottom: 3.125rem; /* 50px */
+  text-decoration: none;
+  color:inherit;
 }
 
 .logo img {
@@ -107,12 +109,15 @@ header {
   display: flex;
   align-items: center;
   gap: 0.625rem; /* 10px */
+  text-decoration: none;
+  color:inherit;
 }
 
 .profile-pic {
   width: 2.5rem; /* 40px */
   height: 2.5rem;
   border-radius: 50%;
+  margin-right: 0.5rem;
 }
 
 .username {
