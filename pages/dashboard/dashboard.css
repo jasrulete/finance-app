@@ -105,7 +105,7 @@
 
 /* Show sidebar when 'active' class is added */
 .sidebar.active {
-    transform: translateX(250px); /* Slide in from the left */
+    transform: translateX(0px); /* Slide in from the left */
 }
 
 .main-content {
@@ -187,7 +187,6 @@
 .overview-cards {
     display: flex;
     flex-direction: row;
-    gap: 15px;
     padding: 20px 40px;
     color: var(--white);
     gap: 35%;
@@ -335,7 +334,12 @@ h2 {
 .gifts .progress-bar { background-color: var(--gifts); }
 
 /* Responsive design */
-@media (min-width: 992px) {
+@media (max-width: 992px) {
+    .dashboard-grid {
+        padding: 20px;
+        gap: 50px;
+    }
+
     .icon {
         width: 45px;
         height: 45px;
@@ -350,14 +354,105 @@ h2 {
     }
 }
 
+@media (max-width: 947px) {
+    .overview-container h2 {
+        font-size: 2rem;
+    }
+
+    .overview-cards {
+        gap: 100px;
+    }
+
+    .title h4 {
+        font-size: 1.25rem;
+        padding-left: 5px;
+    }
+
+    .overview-amount {
+        font-size: 2rem;
+    }
+
+    .budget-header h1 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 819px) {
+    .welcome-message h1 {
+        font-size: 2.5rem;
+    }
+
+    .overview-container h2 {
+        font-size: 1.7rem;
+    }
+
+    .title h4 {
+        font-size: 1rem;
+    }
+
+    .overview-amount {
+        font-size: 1.5rem;
+    }
+
+    .chart-container {
+        padding: 0 5px 10px;
+    }
+
+    .budget-header h1 {
+        font-size: 1.7rem;
+    }
+
+    .material-icons.white {
+        font-size: 1.5rem;
+    }
+
+    .budget-item {
+        padding: 10px;
+    }
+
+    .budget-title {
+        font-size: 0.8rem;
+    }
+}
+
 @media (max-width: 768px) {
     .sidebar {
-        transform: translateX(-250px); /* Sidebar is hidden off-screen on small devices */
+        position: fixed; /* Fixed position so it overlays content */
+        top: 150;
+        left: 0;
+        height: 100vh; /* Full viewport height */
+        z-index: 1000; /* High z-index to ensure it's on top */
+        transform: translateX(-250px); /* Hidden by default */
+        transition: transform 0.3s ease; /* Smooth transition */
     }
     
-    /* Adjust container when sidebar is active */
+    .sidebar.active {
+        transform: translateX(0); /* Slide in when active */
+    }
+    
     .main-content {
         width: 100%; /* Full width when sidebar is hidden */
+    }
+
+    .overview-container h2 {
+        font-size: 2rem;
+    }
+
+    .overview-cards {
+        gap: 100px;
+    }
+
+    .title h4 {
+        font-size: 1.25rem;
+        padding-left: 5px;
+    }
+
+    .overview-amount {
+        font-size: 2rem;
+    }
+
+    .budget-header h1 {
+        font-size: 2rem;
     }
 
     .dashboard-grid {
@@ -383,5 +478,41 @@ h2 {
 
     .budget-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 550px) {
+    .logo-img {
+        height: 40px;
+    }
+
+    .logo-text {
+        font-size: 1.2rem;
+    }
+
+    .avatar-image {
+        height: 40px;
+        width: 40px;
+    }
+
+    .user-name {
+        font-size: 1.2rem;
+    }
+
+    .logout-link {
+        font-size: 1rem;
+    }
+
+    .welcome-message h1 {
+        font-size: 2rem;
+    }
+
+    .welcome-message p {
+        font-size: 0.8rem;
+    }
+
+    .overview-cards {
+        flex-direction: column;
+        gap: 20px;
     }
 }

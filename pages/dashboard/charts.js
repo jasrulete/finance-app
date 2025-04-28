@@ -191,8 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Uncomment this line if you want animated progress bars on load
-    // animateProgressBars();
+    animateProgressBars();
     
     // Optional: Update progress bars with real data
     function updateProgressBar(category, percentage) {
@@ -207,13 +206,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // updateProgressBar('overall', 80);
 });
 
-document.getElementById('toggle-sidebar').addEventListener('click', function() {
-    var sidebar = document.querySelector('.sidebar');
-    var container = document.querySelector('.container');
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('toggle-sidebar').addEventListener('click', function() {
+      var sidebar = document.querySelector('.sidebar');
+      var container = document.querySelector('.container');
   
-    // Toggle the 'active' class to slide in/out the sidebar
-    sidebar.classList.toggle('active');
-    
-    // Add a class to shift the main content when sidebar is visible
-    container.classList.toggle('sidebar-active');
+      sidebar.classList.toggle('active');
+      container.classList.toggle('sidebar-active');
+    });
   });
+  
