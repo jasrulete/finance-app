@@ -171,6 +171,7 @@ header {
 
 .block-icon {
   width: 1.875rem; /* 30px */
+  filter: invert(1);
 }
 
 /* Table */
@@ -192,7 +193,7 @@ td {
 th {
   width: 18%;
   background-color: var(--primary-color);
-  font-size: 0.95rem;
+  font-size: 1rem; /* 16px */
   text-align: center;
 }
 
