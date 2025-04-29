@@ -27,10 +27,10 @@
 </head>
 <body>
 
-  <header class="header">
+  <header class="header" role="banner">
     <div class="logo">
       <div class="logo-icon">
-        <img src="/pics/mockLogo.png" alt="BudgetWise Logo" class="logo-img" id="toggle-sidebar">
+        <img src="/static/pics/mockLogo.png" alt="BudgetWise Logo" class="logo-img" id="toggle-sidebar">
       </div>
       <div class="logo-text">BudgetWise</div>
     </div>
@@ -39,6 +39,7 @@
         <img src="../../pics/user.png" alt="User Avatar" class="avatar-image">
       </div>
       <div class="user-info">
+        <!--Retrieve user's name from backend-->
         <span class="user-name">John Doe</span>
         <span class="logout-link">Log Out</span>
       </div>
@@ -46,7 +47,7 @@
   </header>
 
   <div class="container">
-    <sidebar class="sidebar">
+    <aside class="sidebar" role="complementary">
         <div class="menu-item active">
         <div class="menu-icon">
             <span class="material-icons">dashboard</span>
@@ -71,11 +72,14 @@
         </div>
         <span>Export</span>
         </div>
-    </sidebar>
+    </aside>
 
-    <div class="main-content">
+    <div class="main-content" role="main">
         <div class="welcome-message">
+        <!--Retrieve user's name from backend-->
         <h1>Welcome, John Doe!</h1>
+
+        <!--Apply current month using backend-->
         <p>
             Manage your finances easily. Here's your budget summary for April.
         </p>

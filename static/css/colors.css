@@ -1,24 +1,30 @@
 /* Global Color Variables */
 :root {
+    /* Primary Brand Colors */
     --primary: #7b337d;
     --secondary: #210535;
     --light-primary: #f5d5e0;
     --light-secondary: #f4c4d4;
     --white: #ffffff;
-  
+
+    /* Text Colors */
     --text: #ffffff;
     --dark-text: #210535;
     --muted-text: #ffffff80;
   
+    /* Status Colors */
     --green: #77dd77;
     --red: #ff6961;
     --yellow: #ffee8c;
+
     --button-gray: #b0b0b0;
 
+    /* Hover Colors */
     --hover-primary: #9c4da0;
     --hover-secondary: #3a0a60;
     --hover-menu-item: #8b5cf6;
-  
+
+    /* Budget Category Colors */
     --bills: #e7d7ca;
     --grocery: #d5f6fb;
     --food: #f6f3a9;
@@ -27,6 +33,7 @@
     --transpo: #d5d1e9;
     --gifts: #f8c57c;
   
+    /* UI Component Colors */
     --budget-card: #2f1045;
     --icon-container: #210535;
     --status-bar: #1f092e;
