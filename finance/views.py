@@ -3,6 +3,7 @@ from .models import Entry, Category
 from .forms import EntryForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
+from django.core.paginator import Paginator
 
 # @never_cache
 # @login_required
@@ -13,8 +14,23 @@ from django.views.decorators.cache import never_cache
 @never_cache
 @login_required
 def transaction(request):
-    entries = Entry.objects.filter(user=request.user)
-    return render(request, 'finance/transaction.html', {'entries': entries})
+    income_entries = Entry.objects.filter(user=request.user, entry_type='income').order_by('-date')
+    expense_entries = Entry.objects.filter(user=request.user, entry_type='expense').order_by('-date')
+
+    income_paginator = Paginator(income_entries, 5)  # 5 per page
+    expense_paginator = Paginator(expense_entries, 5)
+
+    income_page_number = request.GET.get('income_page')
+    expense_page_number = request.GET.get('expense_page')
+
+    income_page = income_paginator.get_page(income_page_number)
+    expense_page = expense_paginator.get_page(expense_page_number)
+
+    return render(request, 'finance/transaction.html', {
+    'income_page': income_page,
+    'expense_page': expense_page,
+})
+
 
 @never_cache
 @login_required

@@ -219,6 +219,27 @@ td {
   transition: transform 0.3s ease;
 }
 
+.pagination {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.pagination a {
+  color: #fff;
+  padding: 8px 12px;
+  background-color: var(--accent-color);
+  border-radius: 5px;
+  margin: 0 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.pagination span {
+  margin: 0 10px;
+  color: var(--white);
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
   body {
