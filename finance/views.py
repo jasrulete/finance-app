@@ -4,11 +4,17 @@ from .forms import EntryForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 
+# @never_cache
+# @login_required
+# def entry_list(request):
+#     entries = Entry.objects.filter(user=request.user)
+#     return render(request, 'finance/entry_list.html', {'entries': entries})
+
 @never_cache
 @login_required
-def entry_list(request):
+def transaction(request):
     entries = Entry.objects.filter(user=request.user)
-    return render(request, 'finance/entry_list.html', {'entries': entries})
+    return render(request, 'finance/transaction.html', {'entries': entries})
 
 @never_cache
 @login_required

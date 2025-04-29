@@ -124,6 +124,11 @@ header {
   font-weight: bold;
   font-size: 1rem;
   color: var(--white);
+  text-decoration: none;
+}
+
+.user-details p{
+  text-decoration: none;
 }
 
 .logout {

@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BudgetWise - Transactions</title>
+
+  <link rel="stylesheet" href="{% static 'pages/transaction/transaction.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/colors.css' %}" />
+
+  <!-- Google Font (K2D) -->
+  {% comment %} <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wdth@75..125&family=K2D:wght@400;600;700&display=swap" rel="stylesheet" /> {% endcomment %}
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="{% url 'login' %}" class="logo">
+            <img src="{% static 'pics/mockLogo.png' %}" alt="BudgetWise Logo" />
+            <h2>BudgetWise</h2>
+        </a>
+        <nav>
+            <a href="{% url 'dashboard' %}">
+                <img src="{% static 'pics/dashboard.png' %}" alt="Dashboard Icon" />
+                Dashboard
+            </a>
+            <a href="{% url 'dashboard' %}">
+                <img src="{% static 'pics/expenses.png' %}" alt="Expenses Icon" />
+                Expenses
+            </a>
+            <a href="{% url 'dashboard' %}">
+                <img src="{% static 'pics/transactions.png' %}" alt="Transactions Icon" />
+                Transactions
+            </a>
+            <a href="{% url 'dashboard' %}">
+                <img src="{% static 'pics/export.png' %}" alt="Export Icon" />
+                Export
+            </a>
+        </nav>
+    </div>
+
+    <!-- Right panel -->
+    <div class="main-content">
+      <header class="user-info">
+        <a href= "{% url 'dashboard' %}">
+        <img src="{% static 'pics/user.png' %}" alt="User Profile" class="profile-pic" />
+        </a>
+        <div class="user-details">
+            <a href= "{% url 'dashboard' %}">
+            <p class="username">John Doe</p>
+            </a>
+            <a href="/logout" class="logout">Log Out</a>
+        </div>
+      </header>
+
+      <section class="transactions-section">
+        <h1 class="section-title">Transactions</h1>
+        <p class="subtitle">Easily review and manage your financial history.</p>
+
+        <!-- Income Section -->
+        <div class="transactions-block">
+          <h2 class="block-title">
+            <img src="{% static 'pics/income.png' %}" alt="Income Icon" class="block-icon" />
+            Income
+          </h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                {% if entry.entry_type == 'income' %}
+                <tr>
+                    <td>{{ entry.title }}</td>
+                    <td>{{ entry.category.name }}</td>
+                    <td>{{ entry.date|date:"Y-m-d" }}</td>
+                    <td>PHP {{ entry.amount }}</td>
+                    <td>{{ entry.notes }}</td>
+                    <td class="actions">
+                    {% if entry.id %}
+                        <a href="{% url 'finance:entry-update' entry.id %}" aria-label="Edit transaction">
+                        <img src="{% static 'pics/edit.png' %}" alt="Edit Icon" />
+                        </a>
+                        <a href="{% url 'finance:entry-delete' entry.id %}" aria-label="Delete transaction">
+                        <img src="{% static 'pics/trash.png' %}" alt="Delete Icon" />
+                        </a>
+                    {% else %}
+                        <span class="text-muted">Invalid Entry</span>
+                    {% endif %}
+                    </td>
+                </tr>
+                {% endif %}
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No income entries found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Expenses Section -->
+        <div class="transactions-block">
+          <h3 class="block-title">
+            <img src="{% static 'pics/expense-list.png' %}" alt="Expenses Icon" class="block-icon" />
+            Expenses
+          </h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Notes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                  {% if entry.entry_type == 'expense' %}
+                  <tr>
+                    <td>{{ entry.title }}</td>
+                    <td>{{ entry.category.name }}</td>
+                    <td>{{ entry.date|date:"Y-m-d" }}</td>
+                    <td>PHP {{ entry.amount }}</td>
+                    <td>{{ entry.notes }}</td>
+                    <td class="actions">
+                      {% if entry.id %}
+                        <a href="{% url 'finance:entry-update' entry.id %}" aria-label="Edit transaction">
+                          <img src="{% static 'pics/edit.png' %}" alt="Edit Icon" />
+                        </a>
+                        <a href="{% url 'finance:entry-delete' entry.id %}" aria-label="Delete transaction">
+                          <img src="{% static 'pics/trash.png' %}" alt="Delete Icon" />
+                        </a>
+                      {% else %}
+                        <span class="text-muted">Invalid Entry</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endif %}
+                {% empty %}
+                  <tr>
+                    <td colspan="6" class="text-center">No expense entries found.</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+                      
+          </table>
+        </div>
+      </section>
+    </div>
+</body>
+</html>
