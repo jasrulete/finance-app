@@ -55,10 +55,10 @@ body {
 }
 
 .logo-icon {
-    width: 350px;
-    height: auto;
-    margin-bottom: 30px;
-  }
+  width: 350px;
+  height: auto;
+  margin-bottom: 30px;
+}
 
 .copyright {
   font-size: 0.75rem;
