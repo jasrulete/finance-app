@@ -2,12 +2,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Entry
 from .forms import EntryForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 
+@never_cache
 @login_required
 def entry_list(request):
     entries = Entry.objects.filter(user=request.user)
     return render(request, 'finance/entry_list.html', {'entries': entries})
 
+@never_cache
 @login_required
 def entry_create(request):
     if request.method == 'POST':
@@ -21,6 +24,7 @@ def entry_create(request):
         form = EntryForm()
     return render(request, 'finance/entry_form.html', {'form': form})
 
+@never_cache
 @login_required
 def entry_update(request, pk):
     entry = get_object_or_404(Entry, pk=pk, user=request.user)
@@ -33,6 +37,7 @@ def entry_update(request, pk):
         form = EntryForm(instance=entry)
     return render(request, 'finance/entry_form.html', {'form': form})
 
+@never_cache
 @login_required
 def entry_delete(request, pk):
     entry = get_object_or_404(Entry, pk=pk, user=request.user)

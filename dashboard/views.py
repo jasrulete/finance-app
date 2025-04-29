@@ -3,9 +3,11 @@ from finance.models import Entry
 from django.db.models import Sum
 from django.utils.timezone import now
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 import calendar
 import json
 
+@never_cache
 @login_required
 def dashboard_view(request):
     user = request.user
