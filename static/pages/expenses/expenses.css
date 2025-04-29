@@ -1,0 +1,322 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'K2D', sans-serif;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: var(--secondary);
+    border-bottom: 1px solid var(--primary);
+}
+
+.logo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.logo-img {
+    height: 48px;
+    width: auto;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 500;
+    padding-left: 5px;
+    color: var(--white);
+}
+
+#toggle-sidebar {
+    cursor: pointer;
+}
+
+.user-profile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.avatar-image {
+    height: 48px;
+    width: 48px;
+    border-radius: 50%;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding-right: 2rem;
+    color: var(--white);
+}
+
+.user-name {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: var(--secondary);
+    height: auto;
+    width: 250px;
+    left: -250px;
+}
+
+.menu-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--white);
+    padding: 10px 20px;
+}
+
+.menu-item:hover {
+    background-color: var(--hover-menu-item);
+    border-radius: 10px;
+}
+
+.menu-icon {
+    height: 24px;
+    width: 24px;
+}
+
+.menu-item.active {
+    background-color: var(--primary);
+    border-radius: 10px;
+    color: var(--dark-text);
+}
+
+/* Show sidebar when 'active' class is added */
+.sidebar.active {
+    transform: translateX(0px); /* Slide in from the left */
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 40px;
+    background-color: var(--primary);
+    height: 100%;
+    width: calc(100% - 250px);
+}
+
+.welcome-message {
+    color: var(--light-primary);
+    padding-bottom: 40px;
+}
+
+.welcome-message h1 {
+    font-size: 3rem;
+    font-weight: 500;
+    padding-bottom: 10px;
+}
+
+.entry-message {
+    color: var(--light-primary);
+    padding-bottom: 40px;
+}
+
+.entry-message h1 {
+    font-size: 3rem;
+    font-weight: 500;
+    padding-bottom: 10px;
+}
+
+.form-container {
+    background-color: var(--secondary);
+    padding: 40px;
+    border-radius: 25px;
+}
+
+/* Form Layout */
+.form-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+.input-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    color: white;
+}
+
+/* Inputs */
+input, select, textarea {
+    background-color: transparent;
+    width: 100%;
+    border: 2px solid #5a3570;
+    border-radius: 10px;
+    color: white;
+    padding: 12px 15px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #9e6db3;
+}
+
+.title-input, .category-select, .date-input {
+    position: relative;
+}
+
+/* Input with icons */
+.date-input {
+    position: relative;
+    display: inline-block;
+}
+
+.date {
+    appearance: none; /* removes native styling */
+    -webkit-appearance: none;
+}
+
+.material-icons.calendar {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: white; /* Change this to whatever color you like */
+  }
+
+.dropdown-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    pointer-events: none;
+}
+
+  /* Notes textarea */
+  .notes-textarea {
+    resize: none;
+    height: 170px;
+  }
+
+  /* Type Buttons */
+  .type-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+  }
+
+  .type-button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .income-button {
+    background-color: #8d4ca2;
+    color: white;
+  }
+
+  .income-button.active {
+    background-color: #a458bd;
+  }
+
+  .expense-button {
+    background-color: white;
+    color: #8d4ca2;
+  }
+
+  .expense-button.active {
+    background-color: #f0f0f0;
+  }
+
+  /* Calculator */
+  .calc-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .amount-display {
+    background-color: #8d4ca2;
+    border-radius: 10px;
+    padding: 12px 15px;
+    text-align: right;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    min-height: 48px;
+  }
+
+  .calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .calc-button {
+    background-color: #2c0043;
+    border: 1px solid #4e2d65;
+    border-radius: 10px;
+    color: white;
+    padding: 15px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .calc-button:hover {
+    background-color: #3e1759;
+  }
+
+  .calc-button.special {
+    background-color: #3e1759;
+  }
+
+  /* Submit Button */
+  .submit-button {
+    grid-column: 1 / -1;
+    background-color: #5fe88c;
+    color: #111;
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .submit-button:hover {
+    background-color: #4ad077;
+  }
