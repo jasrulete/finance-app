@@ -14,5 +14,21 @@ class EntryForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+
         if user:
-            self.fields['category'].queryset = Category.objects.filter(user=user)
+            Category.create_default_categories(user)
+
+            # filter categories based on entry type if it's set
+            if 'entry_type' in self.data:
+                entry_type = self.data.get('entry_type')
+                self.fields['category'].queryset = Category.objects.filter(
+                    user=user,
+                    category_type=entry_type
+                )
+            elif self.instance and self.instance.entry_type:
+                self.fields['category'].queryset = Category.objects.filter(
+                    user=user,
+                    category_type=self.instance.entry_type
+                )
+            else:
+                self.fields['category'].queryset = Category.objects.filter(user=user)

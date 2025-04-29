@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Entry
+from .models import Entry, Category
 from .forms import EntryForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
@@ -13,6 +13,8 @@ def entry_list(request):
 @never_cache
 @login_required
 def entry_create(request):
+    Category.create_default_categories(request.user)
+
     if request.method == 'POST':
         form = EntryForm(request.POST, user=request.user)
         if form.is_valid():
@@ -21,7 +23,7 @@ def entry_create(request):
             entry.save()
             return redirect('finance:entry-list')
     else:
-        form = EntryForm()
+        form = EntryForm(user=request.user)
     return render(request, 'finance/entry_form.html', {'form': form})
 
 @never_cache
@@ -34,7 +36,7 @@ def entry_update(request, pk):
             form.save()
             return redirect('finance:entry-list')
     else:
-        form = EntryForm(instance=entry)
+        form = EntryForm(instance=entry, user=request.user)
     return render(request, 'finance/entry_form.html', {'form': form})
 
 @never_cache
