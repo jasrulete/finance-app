@@ -2,9 +2,97 @@
 
 {% block content %}
 <h2>{{ form_title }}</h2>
-<form method="POST">
+<form method="POST" id="entry-form">
     {% csrf_token %}
-    {{ form.as_p }}
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="{{ form.entry_type.id_for_label }}" class="form-label">Type</label>
+            {{ form.entry_type }}
+        </div>
+        <div class="col-md-6">
+            <label for="{{ form.category.id_for_label }}" class="form-label">Category</label>
+            {{ form.category }}
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+            {{ form.title }}
+        </div>
+        <div class="col-md-6">
+            <label for="{{ form.amount.id_for_label }}" class="form-label">Amount</label>
+            <div class="input-group">
+                <span class="input-group-text">$</span>
+                {{ form.amount }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="{{ form.date.id_for_label }}" class="form-label">Date</label>
+            {{ form.date }}
+        </div>
+        <div class="col-md-6">
+            <label for="{{ form.notes.id_for_label }}" class="form-label">Notes</label>
+            {{ form.notes }}
+        </div>
+    </div>
+
     <button type="submit" class="btn btn-success">Save</button>
+    <a href="{% url 'finance:entry-list' %}" class="btn btn-secondary">Cancel</a>
 </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const entryTypeSelect = document.getElementById('id_entry_type');
+    const categorySelect = document.getElementById('id_category');
+    const form = document.getElementById('entry-form');
+
+    // Function to update categories based on entry type
+    function updateCategories() {
+        const entryType = entryTypeSelect.value;
+        const url = "{% url 'finance:entry-create' %}";
+
+        fetch(url, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newCategorySelect = doc.getElementById('id_category');
+            if (newCategorySelect) {
+                categorySelect.innerHTML = newCategorySelect.innerHTML;
+            }
+        });
+    }
+
+    // Add event listener for entry type change
+    if (entryTypeSelect) {
+        entryTypeSelect.addEventListener('change', updateCategories);
+    }
+
+    // Initialize categories based on current entry type
+    if (entryTypeSelect && categorySelect && entryTypeSelect.value) {
+        updateCategories();
+    }
+});
+</script>
+
+<style>
+    /* Add some basic styling */
+    .form-control, .form-select {
+        margin-bottom: 10px;
+    }
+    .text-success { color: #28a745; }
+    .text-danger { color: #dc3545; }
+</style>
 {% endblock %}
