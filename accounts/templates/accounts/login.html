@@ -1,21 +1,62 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BudgetWise - Log In</title>
 
-{% block content %}
-<h2>Login</h2>
-<form method="POST">
-    {% csrf_token %}
-    <div>
+<link rel="stylesheet" href="{% static 'pages/login/login.css' %}">
+<link rel="stylesheet" href="{% static 'css/colors.css' %}">
+
+<!-- Google Font (K2D) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wdth@75..125&family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" 
+    rel="stylesheet"
+>
+</head>
+<body>
+<div class="container">
+    <div class="left-panel">
+    <h1>BUDGETWISE</h1>
+    <p class="tagline">
+        Take control of your finances,
+        track your income and expenses,
+        and stay on top of your budget.
+    </p>
+    <img
+        src="{% static 'pics/mocklogo.png' %}"
+        alt="Budget Icon"
+        class="logo-icon"
+    />
+    <p class="copyright">&copy; 2025 BudgetWise. All rights reserved.</p>
+    </div>
+
+    <div class="right-panel">
+    <h2>Welcome Back!</h2>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form action="{% url 'login' %}" method="POST" class="form">
+        {% csrf_token %}
+
         <label for="username">Username</label>
-        <input type="text" id="username" name="username" required>
-    </div>
-    <div>
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
+        <input type="text" id="username" name="username" required />
 
-{% if error %}
-<p style="color:red;">{{ error }}</p>
-{% endif %}
-{% endblock %}
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+
+        <button type="submit" class="button">Log In</button>
+    </form>
+
+    <p class="signup-link">
+        Don't have an account yet?
+        <a href="{% url 'signup' %}">Sign Up</a>
+    </p>
+    </div>
+</div>
+</body>
+</html>
