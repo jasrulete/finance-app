@@ -133,6 +133,8 @@ input:focus {
 
 /* Sign Up Link */
 .signup-link {
+/* Sign Up Link */
+.signup-link {
   text-align: center;
   margin-top: 20px;
   font-style: italic;
@@ -141,11 +143,16 @@ input:focus {
 }
 
 .signup-link a {
+}
+
+.signup-link a {
   text-decoration: none;
+  color: var(--dark-text);
   color: var(--dark-text);
   font-weight: 700;
 }
 
+.signup-link a:hover {
 .signup-link a:hover {
   text-decoration: underline;
 }
