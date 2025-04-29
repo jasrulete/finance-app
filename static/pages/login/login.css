@@ -153,8 +153,10 @@ input:focus {
 /* Responsive Styles */
 @media (max-width: 768px) {
   .container {
-    height: auto
+    flex-direction: column;
+    height: auto;
   }
+
   .left-panel h1 {
     font-size: 2.3rem;
   }
@@ -194,12 +196,5 @@ input:focus {
 
   .signup-link {
     font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 588px) {
-  .container {
-    flex-direction: column;
-    height: auto;
   }
 }
