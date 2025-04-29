@@ -133,8 +133,6 @@ input:focus {
 
 /* Sign Up Link */
 .signup-link {
-/* Sign Up Link */
-.signup-link {
   text-align: center;
   margin-top: 20px;
   font-style: italic;
@@ -143,16 +141,11 @@ input:focus {
 }
 
 .signup-link a {
-}
-
-.signup-link a {
   text-decoration: none;
-  color: var(--dark-text);
   color: var(--dark-text);
   font-weight: 700;
 }
 
-.signup-link a:hover {
 .signup-link a:hover {
   text-decoration: underline;
 }
@@ -160,8 +153,10 @@ input:focus {
 /* Responsive Styles */
 @media (max-width: 768px) {
   .container {
-    height: auto
+    flex-direction: column;
+    height: auto;
   }
+
   .left-panel h1 {
     font-size: 2.3rem;
   }
@@ -201,12 +196,5 @@ input:focus {
 
   .signup-link {
     font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 588px) {
-  .container {
-    flex-direction: column;
-    height: auto;
   }
 }
