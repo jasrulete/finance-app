@@ -6,8 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BudgetWise - Transactions</title>
 
-    <link rel="stylesheet" href="{% static 'pages/transaction/transaction.css' %}"/>
+    <link
+      rel="stylesheet"
+      href="{% static 'pages/transaction/transaction.css' %}"
+    />
     <link rel="stylesheet" href="{% static 'css/colors.css' %}" />
+
+    <!-- Google Font (K2D) -->
+    {% comment %}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wdth@75..125&family=K2D:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    {% endcomment %}
   </head>
 
   <body>
@@ -51,9 +64,9 @@
           />
         </a>
         <div class="user-details">
-            <a href="{% url 'dashboard' %}">
+          <a href="{% url 'dashboard' %}">
             <p class="username">John Doe</p>
-            </a>
+          </a>
           <a href="/logout" class="logout">Log Out</a>
         </div>
       </header>
@@ -62,11 +75,201 @@
         <h1 class="section-title">Transactions</h1>
         <p class="subtitle">Easily review and manage your financial history.</p>
 
-        <!--Income Section-->
-        {% include 'finance/transaction_table.html' with entries=income_page title="Income" icon_path='pics/income.png' %}
-        <!--Expense Section-->
-        {% include 'finance/transaction_table.html' with entries=expense_page title="Expenses" icon_path='pics/expense-list.png' %}
+        <!-- Income Section -->
+        <div class="transactions-block">
+          <h2 class="block-title">
+            <img
+              src="{% static 'pics/income.png' %}"
+              alt="Income Icon"
+              class="block-icon"
+            />
+            Income
+          </h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for entry in income_page %}
+              <tr>
+                <td>{{ entry.title }}</td>
+                <td>{{ entry.category.name }}</td>
+                <td>{{ entry.date|date:"Y-m-d" }}</td>
+                <td>PHP {{ entry.amount }}</td>
+                <td>{{ entry.notes }}</td>
+                <td class="actions">
+                  <a onclick="openEntryModal({{ entry.id }})">
+                    <img src="{% static 'pics/edit.png' %}" alt="Edit Icon" />
+                  </a>
+                  <a onclick="openDeleteModal('{{ entry.title }}', '{% url 'finance:entry-delete' entry.id %}')">
+                    <img src="{% static 'pics/trash.png' %}" alt="Delete Icon" />
+                  </a>                  
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="6" class="text-center">
+                  No income entries found.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div class="pagination">
+            {% if income_page.has_previous %}
+            <a href="?income_page={{ income_page.previous_page_number }}"
+              >&laquo; Prev</a
+            >
+            {% endif %}
+            <span
+              >Page {{ income_page.number }} of {{ income_page.paginator.num_pages }}
+            </span>
+            {% if income_page.has_next %}
+            <a href="?income_page={{ income_page.next_page_number }}"
+              >Next &raquo;</a
+            >
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Expenses Section -->
+        <div class="transactions-block">
+          <h3 class="block-title">
+            <img
+              src="{% static 'pics/expense-list.png' %}"
+              alt="Expenses Icon"
+              class="block-icon"
+            />
+            Expenses
+          </h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for entry in expense_page %}
+              <tr>
+                <td>{{ entry.title }}</td>
+                <td>{{ entry.category.name }}</td>
+                <td>{{ entry.date|date:"Y-m-d" }}</td>
+                <td>PHP {{ entry.amount }}</td>
+                <td>{{ entry.notes }}</td>
+                <td class="actions">
+                  <a href="{% url 'finance:entry-update' entry.id %}">
+                    <img src="{% static 'pics/edit.png' %}" alt="Edit Icon" />
+                  </a>
+                  <a href="{% url 'finance:entry-delete' entry.id %}">
+                    <img
+                      src="{% static 'pics/trash.png' %}"
+                      alt="Delete Icon"
+                    />
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="6" class="text-center">
+                  No expense entries found.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div class="pagination">
+            {% if expense_page.has_previous %}
+            <a href="?expense_page={{ expense_page.previous_page_number }}"
+              >&laquo; Prev</a
+            >
+            {% endif %}
+            <span>
+              Page {{ expense_page.number }} of {{ expense_page.paginator.num_pages }}
+            </span>
+            {% if expense_page.has_next %}
+            <a href="?expense_page={{ expense_page.next_page_number }}"
+              >Next &raquo;</a
+            >
+            {% endif %}
+          </div>
+        </div>
+        <!-- Edit Entry Modal -->
+        <div id="entryModal" class="modal">
+          <div class="modal-content">
+            <span class="close" onclick="closeEntryModal()">&times;</span>
+            <h2>Edit Entry</h2>
+            <form id="entry-form" method="POST">
+              {% csrf_token %}
+              <!-- Dynamically load form content -->
+              <div id="entry-form-body"></div>
+              <button type="submit" class="save-button">Save Changes</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div id="deleteModal" class="modal">
+          <div class="modal-content danger">
+            <h3>Delete Entry?</h3>
+            <p>
+              You're going to delete "<span id="entry-title"></span>". Are you
+              sure?
+            </p>
+            <div class="modal-actions">
+              <button onclick="closeDeleteModal()">Cancel</button>
+              <form method="POST" id="delete-form">
+                {% csrf_token %}
+                <button type="submit" class="delete-button">Delete</button>
+              </form>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
+    <script>
+      function openEntryModal(entryId) {
+        fetch(`/finance/edit/${entryId}/`)
+          .then((response) => response.text())
+          .then((html) => {
+            document.getElementById("entry-form-body").innerHTML = html;
+            document.getElementById(
+              "entry-form"
+            ).action = `/finance/edit/${entryId}/`;
+            document.getElementById("entryModal").style.display = "flex";
+          });
+      }
+
+      function closeEntryModal() {
+        document.getElementById("entryModal").style.display = "none";
+      }
+
+      function openDeleteModal(entryTitle, deleteUrl) {
+        document.getElementById("entry-title").textContent = entryTitle;
+        document.getElementById('delete-form').action = deleteUrl;
+        document.getElementById("deleteModal").style.display = "flex";
+      }
+
+      function closeDeleteModal() {
+        document.getElementById("deleteModal").style.display = "none";
+      }
+
+      // Optional: Close modal when clicking outside it
+      window.onclick = function (event) {
+        if (event.target.classList.contains("modal")) {
+          closeEntryModal();
+          closeDeleteModal();
+        }
+      };
+    </script>
   </body>
 </html>
