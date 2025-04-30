@@ -1,0 +1,458 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'K2D', sans-serif;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: var(--secondary);
+    border-bottom: 1px solid var(--primary);
+}
+
+.logo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.logo-img {
+    height: 48px;
+    width: auto;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 500;
+    padding-left: 5px;
+    color: var(--white);
+}
+
+#toggle-sidebar {
+    cursor: pointer;
+}
+
+.user-profile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.avatar-image {
+    height: 48px;
+    width: 48px;
+    border-radius: 50%;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding-right: 2rem;
+    color: var(--white);
+}
+
+.user-name {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: var(--secondary);
+    height: auto;
+    width: 250px;
+    left: -250px;
+}
+
+.menu-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--white);
+    padding: 10px 20px;
+}
+
+.menu-item:hover {
+    background-color: var(--hover-menu-item);
+    border-radius: 10px;
+}
+
+.menu-icon {
+    height: 24px;
+    width: 24px;
+}
+
+.menu-item.active {
+    background-color: var(--primary);
+    border-radius: 10px;
+    color: var(--dark-text);
+}
+
+/* Show sidebar when 'active' class is added */
+.sidebar.active {
+    transform: translateX(0px); /* Slide in from the left */
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 40px;
+    background-color: var(--primary);
+    height: 100%;
+    width: calc(100% - 250px);
+}
+
+.welcome-message {
+    color: var(--light-primary);
+    padding-bottom: 40px;
+}
+
+.welcome-message h1 {
+    font-size: 3rem;
+    font-weight: 500;
+    padding-bottom: 10px;
+}
+
+.entry-message {
+    color: var(--light-primary);
+    padding-bottom: 40px;
+}
+
+.entry-message h1 {
+    font-size: 3rem;
+    font-weight: 500;
+    padding-bottom: 10px;
+}
+
+.expense-dashboard {
+  background-color: var(--secondary);
+  border-radius: 25px;
+  padding: 40px;
+  width: 100%;
+  margin: 0 auto 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.pie-chart-container {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#expense-pie-chart {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.add-expense-button {
+  background-color: transparent;
+  margin-top: 20px;
+  width: 50%;
+  max-width: 250px;
+  color: white;
+  border: 2px solid white;
+  border-radius: 30px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-expense-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.form-container {
+    background-color: var(--secondary);
+    padding: 40px;
+    border-radius: 25px;
+}
+
+/* Form Layout */
+.form-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+.input-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    color: white;
+}
+
+/* Inputs */
+input, select, textarea {
+    background-color: transparent;
+    width: 100%;
+    border: 2px solid #5a3570;
+    border-radius: 10px;
+    color: white;
+    padding: 12px 15px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #9e6db3;
+}
+
+select {
+    cursor: pointer;
+}
+
+.title-input, .category-select, .date-input {
+    position: relative;
+}
+
+/* Input with icons */
+option {
+    background-color: var(--secondary);
+    color: white;
+    border: 2px solid #5a3570;
+    border-radius: 10px;
+    padding: 12px 15px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.date-input {
+    position: relative;
+    display: inline-block;
+}
+
+.date {
+    appearance: none; /* removes native styling */
+    -webkit-appearance: none;
+}
+
+.material-icons.calendar {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: white; /* Change this to whatever color you like */
+}
+
+/* Notes textarea */
+.notes-textarea {
+    resize: none;
+    height: 170px;
+}
+
+/* Type Buttons */
+.type-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.type-button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    background-color: white;
+    color: var(--primary);
+}
+
+.type-button.active {
+    background-color: var(--primary);
+    color: white;
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Calculator */
+.calc-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.amount-display {
+    background-color: #8d4ca2;
+    border-radius: 10px;
+    padding: 12px 15px;
+    text-align: right;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    min-height: 48px;
+}
+
+.calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.calc-button {
+    background-color: #2c0043;
+    border: 1px solid #4e2d65;
+    border-radius: 10px;
+    color: white;
+    padding: 15px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.calc-button:hover {
+    background-color: #3e1759;
+}
+
+.calc-button.special {
+    background-color: #3e1759;
+}
+
+/* Submit Button */
+.submit-button {
+    background-color: var(--green);
+    color: #111;
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #4ad077;
+}
+
+.error-field {
+    border-color: #d9534f !important;
+    box-shadow: 0 0 0 0.2rem rgba(217, 83, 79, 0.25) !important;
+}
+  
+@keyframes slideIn {
+    from { transform: translateY(1rem); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+  
+.success-toast {
+    animation: slideIn 0.3s ease-in-out;
+}
+
+@media (max-width: 1025px) {
+    .form-container {
+        grid-template-columns: 1fr;
+    }
+
+    .type-buttons {
+      margin-top: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+      position: fixed;
+      top: auto;
+      left: 0;
+      height: 100%;
+      z-index: 1000;
+      transform: translateX(-250px);
+      transition: transform 0.3s ease; /* Smooth transition */
+    }
+
+    .sidebar.active {
+      transform: translateY(0); /* Slide in when active */
+    }
+
+    .main-content {
+      width: 100%;
+    }
+
+    .user-info {
+        padding-right: 0.5rem;
+    }
+
+    .main-content {
+        width: 100%;
+    }
+
+    .welcome-message h1 {
+        font-size: 2.5rem;
+    }
+
+    .entry-message h1 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+  .welcome-message h1 {
+    font-size: 2rem;
+  }
+
+  .entry-message h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 550px) {
+  .logo-img {
+      height: 40px;
+  }
+
+  .logo-text {
+      font-size: 1.2rem;
+  }
+
+  .avatar-image {
+      height: 40px;
+      width: 40px;
+  }
+
+  .user-name {
+      font-size: 1.2rem;
+  }
+
+  .logout-link {
+      font-size: 1rem;
+  }
+}
