@@ -71,9 +71,6 @@ var barChart = new Chart(ctx2, {
   <!-- CSS file link -->
   <link rel="stylesheet" href="{% static 'pages/dashboard/dashboard.css' %}">
   <link rel="stylesheet" href="{% static 'css/colors.css' %}">
-  <!-- Import JS file -->
-  <script src="{% static 'pages/dashboard/charts.js' %}"></script>
-
   <!-- Google Font (K2D) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -186,36 +183,37 @@ var barChart = new Chart(ctx2, {
         </div>
 
         <div class="overview-container">
-          <h2>Financial Overview this Year</h2>
-          <div class="overview-cards">
-            <div class="income-overview">
+            <h2>Financial Overview this Year</h2>
+                <div class="overview-cards">
+                    <div class="income-overview">
                 <div class="title">
-                <span class="material-icons">attach_money</span>
-                <h4>Income</h4>
+                  <span class="material-icons">attach_money</span>
+                  <h4>Income</h4>
                 </div>
                 <div class="overview-amount">
-                <span class="material-icons income">php</span>
-                {{ total_income }}
+                  <span class="material-icons income">php</span>
+                  PHP {{ total_income }}
                 </div>
-            </div>
-
-            <div class="expense-overview">
+              </div>
+          
+              <div class="expense-overview">
                 <div class="title">
-                <span class="material-icons">receipt_long</span>
-                <h4>Expense</h4>
+                  <span class="material-icons">receipt_long</span>
+                  <h4>Expense</h4>
                 </div>
                 <div class="overview-amount">
-                <span class="material-icons expense">php</span>
-                {{ total_expenses }}
+                  <span class="material-icons expense">php</span>
+                  PHP {{ total_expenses }}
                 </div>
+              </div>
             </div>
-          </div>
-          <div class="chart-container">
-            <div class="barchart-wrapper" style="height: 300px; margin-top: 20px;">
+            
+            <div class="chart-container">
+              <div class="barchart-wrapper" style="height: 300px; margin-top: 20px;">
                 <canvas id="monthlyComparisonChart"></canvas>
+              </div>
             </div>
           </div>
-        </div>
 
         <div class="budget-container">
           <div class="budget-header">
@@ -325,3 +323,106 @@ var barChart = new Chart(ctx2, {
 </div>
 </body>
 </html>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Parse the JSON data from Django template variables
+    const months = JSON.parse('{{ months|escapejs }}');
+    const monthlyIncome = JSON.parse('{{ monthly_income|escapejs }}');
+    const monthlyExpenses = JSON.parse('{{ monthly_expenses|escapejs }}');
+    
+    console.log("Months data:", months);
+    console.log("Income data:", monthlyIncome);
+    console.log("Expense data:", monthlyExpenses);
+
+    // Monthly comparison chart initialization
+    function initMonthlyComparisonChart() {
+      const monthlyData = {
+        labels: months,
+        datasets: [
+          {
+            label: 'Income',
+            data: monthlyIncome,
+            backgroundColor: '#77dd77', // Green color
+            borderWidth: 0,
+            borderRadius: 4,
+            barPercentage: 0.7,
+            categoryPercentage: 0.5,
+          },
+          {
+            label: 'Expense',
+            data: monthlyExpenses,
+            backgroundColor: '#ff6961', // Coral/red color
+            borderWidth: 0,
+            borderRadius: 4,
+            barPercentage: 0.7,
+            categoryPercentage: 0.5
+          }
+        ]
+      };
+      
+      const monthlyOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `${context.dataset.label}: PHP ${context.raw.toLocaleString()}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              color: 'white',
+              font: {
+                size: 14
+              }
+            }
+          },
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)',
+              drawBorder: false
+            },
+            ticks: {
+              display: false,
+              callback: function(value) {
+                return value === 0 ? '0' : `${value/1000}k`;
+              }
+            }
+          }
+        }
+      };
+      
+      // Create the chart
+      new Chart(
+        document.getElementById('monthlyComparisonChart'),
+        {
+          type: 'bar',
+          data: monthlyData,
+          options: monthlyOptions
+        }
+      );
+    }
+
+    initMonthlyComparisonChart();
+    
+    // Add balance indicator (red if negative)
+    const balanceElement = document.querySelector('.balance-overview');
+    if (balanceElement && {{ balance }} < 0) {
+      balanceElement.classList.add('negative-balance');
+    }
+  });
+</script>
