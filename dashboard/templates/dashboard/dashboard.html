@@ -91,12 +91,14 @@ var barChart = new Chart(ctx2, {
 <body>
 
   <header class="header" role="banner">
-    <div class="logo">
-      <div class="logo-icon">
-        <img src="/static/pics/mockLogo.png" alt="BudgetWise Logo" class="logo-img" id="toggle-sidebar">
-      </div>
-      <div class="logo-text">BudgetWise</div>
-    </div>
+    <a href="{% url 'dashboard' %}" class="logo-text">
+        <div class="logo">
+          <div class="logo-icon">
+            <img src="{% static 'pics/mockLogo.png' %}" alt="BudgetWise Logo" class="logo-img" id="toggle-sidebar">
+          </div>
+          <div>BudgetWise</div>
+        </div>
+      </a>      
     <div class="user-profile">
       <div class="user-avatar">
         <img src="/static/pics/user1.png" alt="User Avatar" class="avatar-image">
@@ -123,12 +125,14 @@ var barChart = new Chart(ctx2, {
         </div>
         <span>Expenses</span>
         </div>
+        <a href="{% url 'finance:entry-list' %}">
         <div class="menu-item">
         <div class="menu-icon">
             <span class="material-icons">work_history</span>
         </div>
         <span>Transactions</span>
         </div>
+        </a>
         <div class="menu-item">
         <div class="menu-icon">
             <span class="material-icons">file_download</span>

@@ -16,19 +16,20 @@ class EntryForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         if user:
-            Category.create_default_categories(user)
+            Category.create_default_categories(user)  # Make sure defaults exist
 
-            # filter categories based on entry type if it's set
-            if 'entry_type' in self.data:
-                entry_type = self.data.get('entry_type')
-                self.fields['category'].queryset = Category.objects.filter(
-                    user=user,
-                    category_type=entry_type
-                )
-            elif self.instance and self.instance.entry_type:
-                self.fields['category'].queryset = Category.objects.filter(
-                    user=user,
-                    category_type=self.instance.entry_type
-                )
-            else:
-                self.fields['category'].queryset = Category.objects.filter(user=user)
+            # Default: all user + default categories
+            qs = Category.objects.filter(user=user) | Category.objects.filter(is_default=True)
+
+            # If entry_type is selected via form POST or GET
+            entry_type = (
+                self.data.get('entry_type') or 
+                getattr(self.instance, 'entry_type', None)
+            )
+            if entry_type in dict(Entry.ENTRY_TYPE_CHOICES):
+                qs = qs.filter(category_type=entry_type)
+
+            self.fields['category'].queryset = qs.order_by('name')
+        else:
+            # Safe fallback if no user is passed
+            self.fields['category'].queryset = Category.objects.none()
