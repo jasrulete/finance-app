@@ -1,0 +1,66 @@
+{% load static %}
+
+<div class="transactions-block">
+    <h2 class="block-title">
+        <img
+            src="{% static icon_path %}"
+            alt="{{ title }} Icon"
+            class="block-icon"
+        />
+        {{ title }}
+    </h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in entries %}
+      <tr>
+        <td>{{ entry.title }}</td>
+        <td>{{ entry.category.name }}</td>
+        <td>{{ entry.date|date:"Y-m-d" }}</td>
+        <td>PHP {{ entry.amount }}</td>
+        <td>{{ entry.notes }}</td>
+        <td class="actions">
+          <a
+            href="{% url 'finance:entry-update' entry.id %}"
+            aria-label="Edit {{ title }} entry"
+          >
+            <img src="{% static 'pics/edit.png' %}" alt="Edit Icon" />
+          </a>
+          <a
+            href="{% url 'finance:entry-delete' entry.id %}"
+            aria-label="Delete {{ title }} entry"
+          >
+            <img src="{% static 'pics/trash.png' %}" alt="Delete Icon" />
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6">No {{ title|lower }} entries found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="transaction-pagination">
+    {% if entries.has_previous %}
+    <a href="?{{ title|lower }}_page={{ entries.previous_page_number }}"
+      >&laquo; Prev</a
+    >
+    {% endif %}
+    <span>Page {{ entries.number }} of {{ entries.paginator.num_pages }}</span>
+    {% if entries.has_next %}
+    <a href="?{{ title|lower }}_page={{ entries.next_page_number }}"
+      >Next &raquo;</a
+    >
+    {% endif %}
+  </div>
+</div>
