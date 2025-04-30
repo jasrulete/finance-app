@@ -114,49 +114,49 @@
                     <input type="date" id="date" class="date" placeholder="Today" required>
                     <span class="material-icons calendar">calendar_month</span>
                 </div>
-            </div>
-            
-            <!-- Middle Column -->
-            <div class="input-section">
-                <div class="label">NOTES</div>
-                <textarea id="notes" class="notes-textarea"></textarea>
-                
+
                 <div class="type-buttons">
-                <button id="income-btn" class="type-button income-button">Income</button>
-                <button id="expense-btn" class="type-button expense-button">Expense</button>
+                  <button id="income-btn" class="type-button income-button">Income</button>
+                  <button id="expense-btn" class="type-button expense-button">Expense</button>
                 </div>
-            </div>
+              </div>
             
-            <!-- Right Column: Calculator -->
+            <!-- Middle Column: Calculator -->
             <div class="calc-section">
                 <div class="label">AMOUNT</div>
                 <div id="amount-display" class="amount-display">₱</div>
                 
                 <div class="calc-buttons">
-                <button class="calc-button" onclick="appendToDisplay('1')">1</button>
-                <button class="calc-button" onclick="appendToDisplay('2')">2</button>
-                <button class="calc-button" onclick="appendToDisplay('3')">3</button>
-                <button class="calc-button special" onclick="appendOperator('+')">+</button>
-                
-                <button class="calc-button" onclick="appendToDisplay('4')">4</button>
-                <button class="calc-button" onclick="appendToDisplay('5')">5</button>
-                <button class="calc-button" onclick="appendToDisplay('6')">6</button>
-                <button class="calc-button special" onclick="appendOperator('-')">-</button>
-                
-                <button class="calc-button" onclick="appendToDisplay('7')">7</button>
-                <button class="calc-button" onclick="appendToDisplay('8')">8</button>
-                <button class="calc-button" onclick="appendToDisplay('9')">9</button>
-                <button class="calc-button special" onclick="appendOperator('*')">*</button>
-                
-                <button class="calc-button" onclick="appendToDisplay('.')">.</button>
-                <button class="calc-button" onclick="appendToDisplay('0')">0</button>
-                <button class="calc-button special" onclick="calculate()">=</button>
-                <button class="calc-button special" onclick="appendOperator('/')">/</button>
+                  <button class="calc-button" onclick="appendToDisplay('1')">1</button>
+                  <button class="calc-button" onclick="appendToDisplay('2')">2</button>
+                  <button class="calc-button" onclick="appendToDisplay('3')">3</button>
+                  <button class="calc-button special" onclick="appendOperator('+')">+</button>
+                  
+                  <button class="calc-button" onclick="appendToDisplay('4')">4</button>
+                  <button class="calc-button" onclick="appendToDisplay('5')">5</button>
+                  <button class="calc-button" onclick="appendToDisplay('6')">6</button>
+                  <button class="calc-button special" onclick="appendOperator('-')">-</button>
+                  
+                  <button class="calc-button" onclick="appendToDisplay('7')">7</button>
+                  <button class="calc-button" onclick="appendToDisplay('8')">8</button>
+                  <button class="calc-button" onclick="appendToDisplay('9')">9</button>
+                  <button class="calc-button special" onclick="appendOperator('*')">*</button>
+                  
+                  <button class="calc-button" onclick="appendToDisplay('.')">.</button>
+                  <button class="calc-button" onclick="appendToDisplay('0')">0</button>
+                  <button class="calc-button special" onclick="calculate()">=</button>
+                  <button class="calc-button special" onclick="appendOperator('/')">/</button>
                 </div>
             </div>
             
-            <!-- Submit Button -->
-            <button id="submit-btn" class="submit-button">Add Entry</button>
+            <!-- Right Column -->
+            <div class="input-section">
+              <div class="label">NOTES</div>
+              <textarea id="notes" class="notes-textarea"></textarea>
+
+              <!-- Submit Button -->
+              <button id="submit-btn" class="submit-button">Add Entry</button>
+            </div>   
         </div>
     </div>
 </div>
