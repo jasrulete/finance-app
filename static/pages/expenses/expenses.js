@@ -6,12 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Define category options for income and expense
   const incomeCategories = [
-      { value: "", text: "Select a Category", disabled: true, selected: true },
-      { value: "salary", text: "Salary" },
-      { value: "bonus", text: "Bonus" },
-      { value: "business", text: "Business" },
+    { value: "", text: "Select a Category", disabled: true, selected: true },
+    { value: "salary", text: "Salary" },
+    { value: "bonus", text: "Bonus" },
+    { value: "business", text: "Business" },
   ];
-  
+
   const expenseCategories = [
       { value: "", text: "Select a Category", disabled: true, selected: true },
       { value: "grocery", text: "Grocery" },
@@ -60,6 +60,23 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   }
   
+  // Initialize the expense chart if it exists on the page
+  if (document.getElementById('expense-pie-chart')) {
+      initializeExpenseChart();
+      updateChartWithRealData();
+  }
+  
+  // Connect the Add Expense button to the form if it exists
+  const addExpenseBtn = document.getElementById('add-expense-btn');
+  if (addExpenseBtn) {
+      addExpenseBtn.addEventListener('click', function() {
+          // Scroll to the form
+          document.getElementById('entry-form').scrollIntoView({ behavior: 'smooth' });
+          // Auto-select expense
+          document.getElementById('expense-btn').click();
+      });
+  }
+  
   // Form submission
   document.getElementById('submit-btn').addEventListener('click', function() {
       const entryName = document.getElementById('entry-name').value;
@@ -83,16 +100,27 @@ document.addEventListener('DOMContentLoaded', function() {
           return;
       }
       
-      // Here you would typically save the data to your backend
-      // For now, we'll just log it to the console and show an alert
-      console.log({
+      // Create entry object
+      const entry = {
           title: entryName,
           category: category,
           date: document.getElementById('date').value,
           notes: notes,
           amount: amount,
-          type: type
-      });
+          type: type,
+          timestamp: new Date().getTime()
+      };
+      
+      // Save entry to localStorage
+      saveExpenseEntry(entry);
+      
+      // Log the entry for debugging
+      console.log('Entry added:', entry);
+      
+      // Update chart if it exists
+      if (document.getElementById('expense-pie-chart')) {
+          updateChartWithRealData();
+      }
       
       alert('Entry added successfully!');
       
@@ -168,4 +196,172 @@ function updateDisplay() {
 function clearDisplay() {
   currentValue = "";
   document.getElementById('amount-display').textContent = "₱";
+}
+
+// -------------------- EXPENSE CHART FUNCTIONALITY --------------------
+
+// Data Storage Functions
+function saveExpenseEntry(entry) {
+  // Get existing entries or initialize empty array
+  const entries = JSON.parse(localStorage.getItem('expenseEntries')) || [];
+  
+  // Add new entry
+  entries.push(entry);
+  
+  // Save back to localStorage
+  localStorage.setItem('expenseEntries', JSON.stringify(entries));
+}
+
+function getAllEntries() {
+  return JSON.parse(localStorage.getItem('expenseEntries')) || [];
+}
+
+function getEntriesByType(type) {
+  const entries = getAllEntries();
+  return entries.filter(entry => entry.type === type);
+}
+
+// Chart Data Functions
+function calculateCategoryTotals(type = 'expense') {
+  const entries = getEntriesByType(type);
+  const categories = {};
+  
+  entries.forEach(entry => {
+      if (!categories[entry.category]) {
+          categories[entry.category] = 0;
+      }
+      categories[entry.category] += parseFloat(entry.amount);
+  });
+  
+  return categories;
+}
+
+function getChartData() {
+  const categoryTotals = calculateCategoryTotals('expense');
+  const total = Object.values(categoryTotals).reduce((sum, val) => sum + val, 0) || 1; // Avoid division by zero
+  
+  // Define category colors - match these with your icons
+  const categoryColors = {
+      'food': '#ebe986',
+      'transportation': '#c5bfe0',
+      'bills': '#e5d8c9',
+      'grocery': '#b5e8f7',
+      'health': '#f4b9b9',
+      'entertainment': '#e3cd74',
+      'other_expense': '#f4c572',
+      'housing': '#a2d2a4',
+      'utilities': '#c2e8ce'
+  };
+  
+  const labels = Object.keys(categoryTotals);
+  const data = labels.map(label => ((categoryTotals[label] / total) * 100).toFixed(1));
+  const backgroundColor = labels.map(label => categoryColors[label] || '#cccccc');
+  
+  return {
+      labels: labels,
+      datasets: [{
+          data: data,
+          backgroundColor: backgroundColor,
+          borderWidth: 0
+      }]
+  };
+}
+
+// Chart Initialization
+let expensePieChart;
+
+function initializeExpenseChart() {
+  // Sample data for initial rendering
+  const initialData = {
+      labels: ['Food', 'Transportation', 'Bills', 'Grocery', 'Health', 'Entertainment', 'Other'],
+      datasets: [{
+          data: [25, 15, 20, 18, 7, 10, 5], // Sample percentages
+          backgroundColor: [
+              '#ebe986', // Food
+              '#c5bfe0', // Transportation
+              '#e5d8c9', // Bills
+              '#b5e8f7', // Grocery
+              '#f4b9b9', // Health
+              '#e3cd74', // Entertainment
+              '#f4c572'  // Other
+          ],
+          borderWidth: 0
+      }]
+  };
+  
+  // Configuration for the pie chart
+  const config = {
+      type: 'pie',
+      data: initialData,
+      options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+              legend: {
+                  display: false,
+              },
+              tooltip: {
+                  callbacks: {
+                      label: function(context) {
+                          return context.raw + '%';
+                      },
+                      title: function() {
+                        return ''; // Remove the label (title)
+                      },
+                  },
+                  displayColors: false
+              },
+              datalabels: {
+                color: '#000',
+                formatter: function (value, context) {
+                    const label = context.chart.data.labels[context.dataIndex];
+                    return label.toUpperCase();
+                },
+                font: {
+                    size: 18,
+                    family: 'K2D',
+                },
+              }
+          }
+      },
+      plugins: [ChartDataLabels]
+  };
+  
+  // Create the pie chart
+  const ctx = document.getElementById('expense-pie-chart').getContext('2d');
+  expensePieChart = new Chart(ctx, config);
+}
+
+function updateChartWithRealData() {
+  // If chart isn't initialized or element doesn't exist, do nothing
+  if (!expensePieChart || !document.getElementById('expense-pie-chart')) {
+      return;
+  }
+  
+  const chartData = getChartData();
+  
+  // Update chart with real data
+  expensePieChart.data.labels = chartData.labels;
+  expensePieChart.data.datasets[0].data = chartData.datasets[0].data;
+  expensePieChart.data.datasets[0].backgroundColor = chartData.datasets[0].backgroundColor;
+  expensePieChart.update();
+}
+
+// Summary Functions
+function getExpenseSummary() {
+  const entries = getAllEntries();
+  const expenses = entries.filter(entry => entry.type === 'expense');
+  const income = entries.filter(entry => entry.type === 'income');
+  
+  const totalExpense = expenses.reduce((sum, entry) => sum + parseFloat(entry.amount), 0);
+  const totalIncome = income.reduce((sum, entry) => sum + parseFloat(entry.amount), 0);
+  
+  return {
+      totalExpense: totalExpense,
+      totalIncome: totalIncome,
+      balance: totalIncome - totalExpense,
+      expenseCount: expenses.length,
+      incomeCount: income.length,
+      categoryBreakdown: calculateCategoryTotals('expense')
+  };
 }
