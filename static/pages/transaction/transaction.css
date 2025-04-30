@@ -30,6 +30,7 @@ body {
 /* Sidebar */
 .sidebar {
   width: 13.75rem; /* 220px */
+  min-width: 13.75rem;
   background-color: var(--primary-color);
   color: white;
   display: flex;
@@ -58,6 +59,7 @@ body {
 .logo img {
   width: 3.125rem; /* 50px */
   margin-bottom: 0.625rem; /* 10px */
+  margin: 0;
 }
 
 .logo h2 {
@@ -102,6 +104,8 @@ header {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 0.625rem; /* 10px */
   margin-bottom: 1.875rem; /* 30px */
 }
 
@@ -127,7 +131,7 @@ header {
   text-decoration: none;
 }
 
-.user-details p{
+.user-details a{
   text-decoration: none;
 }
 
@@ -181,6 +185,7 @@ header {
 
 /* Table */
 table {
+  min-width: 600px;
   width: 100%;
   border-collapse: collapse;
   background: var(--primary-color);
@@ -208,6 +213,10 @@ td {
 }
 
 .actions {
+  display:flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem; /* 8px */
   justify-content: center;
   align-items: center;
 }
@@ -219,40 +228,67 @@ td {
   transition: transform 0.3s ease;
 }
 
-.pagination {
+.transaction-pagination {
   margin-top: 15px;
   text-align: center;
 }
 
-.pagination a {
-  color: #fff;
-  padding: 8px 12px;
+.transaction-pagination a {
+  color: white;
   background-color: var(--accent-color);
+  padding: 8px 12px;
   border-radius: 5px;
   margin: 0 5px;
   text-decoration: none;
   font-weight: bold;
 }
 
-.pagination span {
+.transaction-pagination span {
   margin: 0 10px;
   color: var(--white);
 }
 
 
+
 /* Responsive */
 @media (max-width: 768px) {
-  body {
-    flex-direction: column;
-  }
-
   .sidebar {
     width: 100%;
+    height: auto;
     flex-direction: row;
-    justify-content: space-around;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
   }
 
-  .main-content {
-    padding: 1.25rem; /* 20px */
+  .logo {
+    margin-bottom: 0;
+  }
+
+  nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  nav a {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .actions img {
+    width: 1.5rem;
+  }
+
+  .block-title {
+    font-size: 1.2rem;
+  }
+
+  .transactions-section h1 {
+    font-size: 1.5rem;
   }
 }
