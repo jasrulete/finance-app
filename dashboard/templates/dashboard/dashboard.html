@@ -71,9 +71,6 @@ var barChart = new Chart(ctx2, {
   <!-- CSS file link -->
   <link rel="stylesheet" href="{% static 'pages/dashboard/dashboard.css' %}">
   <link rel="stylesheet" href="{% static 'css/colors.css' %}">
-  <!-- Import JS file -->
-  <script src="{% static 'pages/dashboard/chart.js' %}"></script>
-
   <!-- Google Font (K2D) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -91,14 +88,12 @@ var barChart = new Chart(ctx2, {
 <body>
 
   <header class="header" role="banner">
-    <a href="{% url 'dashboard' %}" class="logo-text">
-        <div class="logo">
-          <div class="logo-icon">
-            <img src="{% static 'pics/mockLogo.png' %}" alt="BudgetWise Logo" class="logo-img" id="toggle-sidebar">
-          </div>
-          <div>BudgetWise</div>
-        </div>
-      </a>      
+    <div class="logo">
+      <div class="logo-icon">
+        <img src="/static/pics/mockLogo.png" alt="BudgetWise Logo" class="logo-img" id="toggle-sidebar">
+      </div>
+      <div class="logo-text">BudgetWise</div>
+    </div>
     <div class="user-profile">
       <div class="user-avatar">
         <img src="/static/pics/user1.png" alt="User Avatar" class="avatar-image">
@@ -125,14 +120,12 @@ var barChart = new Chart(ctx2, {
         </div>
         <span>Expenses</span>
         </div>
-        <a href="{% url 'finance:entry-list' %}">
         <div class="menu-item">
         <div class="menu-icon">
             <span class="material-icons">work_history</span>
         </div>
         <span>Transactions</span>
         </div>
-        </a>
         <div class="menu-item">
         <div class="menu-icon">
             <span class="material-icons">file_download</span>
@@ -190,36 +183,37 @@ var barChart = new Chart(ctx2, {
         </div>
 
         <div class="overview-container">
-          <h2>Financial Overview this Month</h2>
-          <div class="overview-cards">
-            <div class="income-overview">
+            <h2>Financial Overview this Year</h2>
+                <div class="overview-cards">
+                    <div class="income-overview">
                 <div class="title">
-                <span class="material-icons">attach_money</span>
-                <h4>Income</h4>
+                  <span class="material-icons">attach_money</span>
+                  <h4>Income</h4>
                 </div>
                 <div class="overview-amount">
-                <span class="material-icons income">php</span>
-                {{ total_income }}
+                  <span class="material-icons income">php</span>
+                  PHP {{ total_income }}
                 </div>
-            </div>
-
-            <div class="expense-overview">
+              </div>
+          
+              <div class="expense-overview">
                 <div class="title">
-                <span class="material-icons">receipt_long</span>
-                <h4>Expense</h4>
+                  <span class="material-icons">receipt_long</span>
+                  <h4>Expense</h4>
                 </div>
                 <div class="overview-amount">
-                <span class="material-icons expense">php</span>
-                {{ total_expenses }}
+                  <span class="material-icons expense">php</span>
+                  PHP {{ total_expenses }}
                 </div>
+              </div>
             </div>
-          </div>
-          <div class="chart-container">
-            <div class="barchart-wrapper" style="height: 300px; margin-top: 20px;">
+            
+            <div class="chart-container">
+              <div class="barchart-wrapper" style="height: 300px; margin-top: 20px;">
                 <canvas id="monthlyComparisonChart"></canvas>
+              </div>
             </div>
           </div>
-        </div>
 
         <div class="budget-container">
           <div class="budget-header">
@@ -329,3 +323,177 @@ var barChart = new Chart(ctx2, {
 </div>
 </body>
 </html>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Parse data from Django
+    const financialData = {
+      months: JSON.parse('{{ months|escapejs }}'),
+      monthlyIncome: JSON.parse('{{ monthly_income|escapejs }}'),
+      monthlyExpenses: JSON.parse('{{ monthly_expenses|escapejs }}'),
+      totals: {
+        income: {{ total_income }},
+        expenses: {{ total_expenses }},
+        balance: {{ balance }}
+      }
+    };
+
+    console.log("Financial Data:", financialData);
+
+    // Chart initialization functions
+    const chartManager = {
+      // 1. Monthly Comparison Chart (your existing chart)
+      initMonthlyComparisonChart: function() {
+        const ctx = document.getElementById('monthlyComparisonChart');
+        if (!ctx) return;
+
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: financialData.months,
+            datasets: [
+              {
+                label: 'Income',
+                data: financialData.monthlyIncome,
+                backgroundColor: '#77dd77',
+                borderWidth: 0,
+                borderRadius: 4,
+                barPercentage: 0.7,
+                categoryPercentage: 0.5,
+              },
+              {
+                label: 'Expense',
+                data: financialData.monthlyExpenses,
+                backgroundColor: '#ff6961',
+                borderWidth: 0,
+                borderRadius: 4,
+                barPercentage: 0.7,
+                categoryPercentage: 0.5
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: ctx => `${ctx.dataset.label}: PHP ${ctx.raw.toLocaleString()}`
+                }
+              }
+            },
+            scales: {
+              x: {
+                grid: { display: false, drawBorder: false },
+                ticks: { color: 'white', font: { size: 14 } }
+              },
+              y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(255,255,255,0.1)', drawBorder: false },
+                ticks: {
+                  display: false,
+                  callback: value => value === 0 ? '0' : `${value/1000}k`
+                }
+              }
+            }
+          }
+        });
+      },
+
+      // 2. Financial Summary Doughnut Charts
+      initFinancialSummaryCharts: function() {
+        const income = financialData.totals.income;
+        const expenses = financialData.totals.expenses;
+        const balance = financialData.totals.balance;
+      
+        const total = income + expenses;
+      
+        // Calculate percentages and log
+        const incomePercent = ((income / total) * 100).toFixed(2);
+        const expensePercent = ((expenses / total) * 100).toFixed(2);
+      
+        console.log(`Income: PHP ${income} (${incomePercent}%)`);
+        console.log(`Expenses: PHP ${expenses} (${expensePercent}%)`);
+      
+        // Draw income chart
+        this.createDoughnutChart(
+          'incomeChart',
+          income,
+          total - income,
+          '#77dd77',
+          'Income'
+        );
+      
+        // Draw expense chart
+        this.createDoughnutChart(
+          'expenseChart',
+          expenses,
+          total - expenses,
+          '#ff6961',
+          'Expense'
+        );
+      
+        // Balance chart (uses absolute value for display)
+        const absBalance = Math.abs(balance);
+        const label = balance >= 0 ? 'Remaining' : 'Overspent';
+        const color = balance >= 0 ? '#77dd77' : '#ff6961';
+
+        console.log(`${label}: PHP ${absBalance} of PHP ${income} income`);
+
+        this.createDoughnutChart(
+          'balanceChart',
+          absBalance,
+          income - absBalance,
+          color,
+          label
+        );
+      },
+
+      // Helper function for doughnut charts
+      createDoughnutChart: function(canvasId, value, remainder, color, label) {
+        const ctx = document.getElementById(canvasId);
+        if (!ctx) return;
+      
+        const percentage = ((value / (value + remainder)) * 100).toFixed(2);
+        console.log(`${label} Doughnut Chart: ${percentage}% filled`);
+      
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            datasets: [{
+              data: [value, remainder],
+              backgroundColor: [color, 'rgba(200,200,200,0.1)'],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            cutout: '70%',
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: ctx => `${label}: PHP ${ctx.raw.toLocaleString()}`
+                }
+              }
+            }
+          }
+        });
+      },
+
+      // 3. Balance indicator styling
+      initBalanceIndicator: function() {
+        const balanceElement = document.querySelector('.balance-overview');
+        if (balanceElement && financialData.totals.balance < 0) {
+          balanceElement.classList.add('negative-balance');
+        }
+      }
+    };
+
+    // Initialize all charts
+    chartManager.initMonthlyComparisonChart(); // Your existing chart
+    chartManager.initFinancialSummaryCharts(); // New doughnut charts
+    chartManager.initBalanceIndicator();      // Balance styling
+  });
+</script>
