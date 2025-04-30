@@ -285,6 +285,26 @@
         }
       };
 
+      document.addEventListener('change', function (e) {
+        if (e.target && e.target.id === 'id_entry_type') {
+          const entryType = e.target.value;
+          console.log("Selected Entry Type:", entryType);  // 👈 Debug log
+          fetch(`/finance/get-categories/?entry_type=${entryType}`)
+            .then(response => response.json())
+            .then(data => {
+              const categorySelect = document.getElementById('id_category');
+              categorySelect.innerHTML = '<option value="">---------</option>';
+              data.categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.id;
+                option.textContent = cat.name;
+                categorySelect.appendChild(option);
+              });
+            });
+        }
+      });
+      
+
       {% comment %} document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".calc-pad button").forEach((btn) => {
           btn.addEventListener("click", () => {

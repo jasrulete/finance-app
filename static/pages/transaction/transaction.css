@@ -32,7 +32,6 @@
 .logo-text {
   font-size: 1.5rem;
   font-weight: 500;
-  padding-left: 5px;
   color: var(--white);
   text-decoration: none;
 }
@@ -272,7 +271,7 @@ td {
 
 /* Delete Modal */
 .modal-content.danger {
-  background-color: var(--red);
+  background-color: var(--secondary);
 }
 
 .modal-actions {

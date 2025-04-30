@@ -4,6 +4,9 @@ from .forms import EntryForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
+from django.db.models import Q
 
 #!-- Commented out to avoid circular import issues --!#
 # @never_cache 
@@ -71,3 +74,18 @@ def entry_delete(request, pk):
         entry.delete()
         return redirect('finance:entry-list')
     return render(request, 'finance/entry_confirm_delete.html', {'entry': entry})
+
+@require_GET
+@login_required
+def get_filtered_categories(request):
+    entry_type = request.GET.get('entry_type')
+    if entry_type not in dict(Entry.ENTRY_TYPE_CHOICES):
+        return JsonResponse({'categories': []})
+
+    categories = Category.objects.filter(
+        Q(user=request.user) | Q(is_default=True),
+        category_type=entry_type
+    ).order_by('name')
+
+    data = [{'id': cat.id, 'name': cat.name} for cat in categories]
+    return JsonResponse({'categories': data})
