@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+
+  <!-- CSS file link -->
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="/static/css/colors.css">
+  <!-- Import JS file -->
+  <script src="charts.js"></script>
+
+  <!-- Google Font (K2D) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wdth@75..125&family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" 
+    rel="stylesheet"
+  >
+
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Import Chart.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  
+</head>
+<body>
+
+  <header class="header" role="banner">
+    <div class="logo">
+      <div class="logo-icon">
+        <img src="/static/pics/mockLogo.png" alt="BudgetWise Logo" class="logo-img" id="toggle-sidebar">
+      </div>
+      <div class="logo-text">BudgetWise</div>
+    </div>
+    <div class="user-profile">
+      <div class="user-avatar">
+        <img src="../../pics/user.png" alt="User Avatar" class="avatar-image">
+      </div>
+      <div class="user-info">
+        <!--Retrieve user's name from backend-->
+        <span class="user-name">John Doe</span>
+        <span class="logout-link">Log Out</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <aside class="sidebar" role="complementary">
+        <div class="menu-item active">
+        <div class="menu-icon">
+            <span class="material-icons">dashboard</span>
+        </div>
+        <span>Dashboard</span>
+        </div>
+        <div class="menu-item">
+        <div class="menu-icon">
+            <span class="material-icons">payments</span>
+        </div>
+        <span>Expenses</span>
+        </div>
+        <div class="menu-item">
+        <div class="menu-icon">
+            <span class="material-icons">work_history</span>
+        </div>
+        <span>Transactions</span>
+        </div>
+        <div class="menu-item">
+        <div class="menu-icon">
+            <span class="material-icons">file_download</span>
+        </div>
+        <span>Export</span>
+        </div>
+    </aside>
+
+    <div class="main-content" role="main">
+        <div class="welcome-message">
+        <!--Retrieve user's name from backend-->
+        <h1>Welcome, John Doe!</h1>
+
+        <!--Apply current month using backend-->
+        <p>
+            Manage your finances easily. Here's your budget summary for April.
+        </p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Income Chart -->
+            <div class="chart-item">
+                <div class="chart-wrapper">
+                    <canvas id="incomeChart"></canvas>
+                </div>
+                <div class="chart-text">
+                    <p class="amount">PHP 9999.99</p>
+                    <p class="label">Total Income</p>
+                </div>
+            </div>
+    
+            <!-- Expense Chart -->
+            <div class="chart-item">
+                <div class="chart-wrapper">
+                    <canvas id="expenseChart"></canvas>
+                </div>
+                <div class="chart-text">
+                    <p class="amount">PHP 9999.99</p>
+                    <p class="label">Total Expense</p>
+                </div>
+            </div>
+    
+            <!-- Balance Chart -->
+            <div class="chart-item">
+                <div class="chart-wrapper">
+                    <canvas id="balanceChart"></canvas>
+                </div>
+                <div class="chart-text">
+                    <p class="amount">PHP 9999.99</p>
+                    <p class="label">Remaining Balance</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-container">
+          <h2>Financial Overview this Year</h2>
+          <div class="overview-cards">
+            <div class="income-overview">
+                <div class="title">
+                <span class="material-icons">attach_money</span>
+                <h4>Income</h4>
+                </div>
+                <div class="overview-amount">
+                <span class="material-icons income">php</span>
+                50,000
+                </div>
+            </div>
+
+            <div class="expense-overview">
+                <div class="title">
+                <span class="material-icons">receipt_long</span>
+                <h4>Expense</h4>
+                </div>
+                <div class="overview-amount">
+                <span class="material-icons expense">php</span>
+                50,000
+                </div>
+            </div>
+          </div>
+          <div class="chart-container">
+            <div class="barchart-wrapper" style="height: 300px; margin-top: 20px;">
+                <canvas id="monthlyComparisonChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="budget-container">
+          <div class="budget-header">
+            <h1>My Budgets</h1>
+            <span class="material-icons white">more_vert</span>
+          </div>
+          
+          <div class="budget-grid">
+              <div class="budget-item overall">
+                  <div class="icon">
+                    <span class="material-icons overall">account_balance_wallet</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Overall Budget</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="65"></div>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="budget-item bills">
+                  <div class="icon">
+                    <span class="material-icons bills">receipt</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Bills</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="70"></div>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="budget-item grocery">
+                  <div class="icon">
+                    <span class="material-icons grocery">shopping_cart</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Grocery</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="50"></div>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="budget-item food">
+                  <div class="icon">
+                    <span class="material-icons food">food_bank</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Food</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="75"></div>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="budget-item health">
+                  <div class="icon">
+                    <span class="material-icons health">health_and_safety</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Health</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="40"></div>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="budget-item eating-out">
+                  <div class="icon">
+                    <span class="material-icons eating">fastfood</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Eating Out</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="65"></div>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="budget-item transportation">
+                  <div class="icon">
+                    <span class="material-icons transpo">directions_bus</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Transportation</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="55"></div>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="budget-item gifts">
+                  <div class="icon">
+                    <span class="material-icons gifts">redeem</span>
+                  </div>
+                  <div class="budget-info">
+                      <div class="budget-title">Gifts</div>
+                      <div class="progress-container">
+                          <div class="progress-bar" data-percentage="70"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
