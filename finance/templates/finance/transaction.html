@@ -191,21 +191,21 @@
               {% endfor %}
             </tbody>
           </table>
-          <div class="pagination">
-            {% if expense_page.has_previous %}
-            <a href="?expense_page={{ expense_page.previous_page_number }}"
-              >&laquo; Prev</a
-            >
-            {% endif %}
-            <span>
-                Page {{ expense_page.number }} of {{ expense_page.paginator.num_pages }}
-            </span>
-            {% if expense_page.has_next %}
-            <a href="?expense_page={{ expense_page.next_page_number }}"
-              >Next &raquo;</a
-            >
-            {% endif %}
-          </div
+            <div class="pagination">
+                {% if expense_page.has_previous %}
+                <a href="?expense_page={{ expense_page.previous_page_number }}"
+                >&laquo; Prev</a
+                >
+                {% endif %}
+                <span>
+                    Page {{ expense_page.number }} of {{ expense_page.paginator.num_pages }}
+                </span>
+                {% if expense_page.has_next %}
+                <a href="?expense_page={{ expense_page.next_page_number }}"
+                >Next &raquo;</a
+                >
+                {% endif %}
+            </div>
         </div>
       </section>
     </div>
