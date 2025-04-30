@@ -250,31 +250,22 @@ document.addEventListener('DOMContentLoaded', function() {
     currentValue = '';
     document.getElementById('amount-display').textContent = '₱';
   }
-
-  // Add CSS for error styling
-  (function addErrorStyles() {
-    const style = document.createElement('style');
-    style.textContent = `
-        .error-field {
-            border-color: #d9534f !important;
-            box-shadow: 0 0 0 0.2rem rgba(217, 83, 79, 0.25) !important;
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateY(1rem); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        .success-toast {
-            animation: slideIn 0.3s ease-in-out;
-        }
-    `;
-    document.head.appendChild(style);
-  })();
   initSidebar();
 });
 
-// Toggle sidebar functionality
+// Sidebar toggle functionality (Refactored)
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const container = document.querySelector('.container');
+  
+  if (sidebar && container) {
+    sidebar.classList.toggle('active');
+    container.classList.toggle('sidebar-active');
+  } else {
+    console.error("Sidebar or container elements not found");
+  }
+}
+
 function initSidebar() {
   console.log("Initializing sidebar toggle...");
   
@@ -286,17 +277,10 @@ function initSidebar() {
   
   toggleButton.addEventListener('click', function() {
     console.log("Sidebar toggle button clicked");
-    const sidebar = document.querySelector('.sidebar');
-    const container = document.querySelector('.container');
-    
-    if (sidebar && container) {
-      sidebar.classList.toggle('active');
-      container.classList.toggle('sidebar-active');
-    } else {
-      console.error("Sidebar or container elements not found");
-    }
+    toggleSidebar(); // Reusable function
   });
 }
+
 
 // Calculator functionality
 let currentValue = "";
