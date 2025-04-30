@@ -14,18 +14,30 @@ def dashboard_view(request):
     current_month = now().month
     current_year = now().year
 
+    # Print basic info
+    print(f"\n=== Dashboard Data for {user} (Month: {current_month}/{current_year}) ===")
+
     # entries for the current month and year
     entries = Entry.objects.filter(user=user, date__year=current_year, date__month=current_month)
+    print(f"\nAll entries for this month: {entries.count()} records")
 
+    # Totals
     total_income = entries.filter(entry_type='income').aggregate(total=Sum('amount'))['total'] or 0
     total_expenses = entries.filter(entry_type='expense').aggregate(total=Sum('amount'))['total'] or 0
     balance = total_income - total_expenses
 
-    # pie chart test
-    expense_by_category = entries.filter(entry_type='expense').values('category__name').annotate(total=Sum('amount'))
-    categories = [item['category__name'] or 'Uncategorized' for item in expense_by_category]
-    amounts = [float(item['total']) for item in expense_by_category]
+    print("\n=== TOTALS ===")
+    print(f"Income: {total_income}")
+    print(f"Expenses: {total_expenses}")
+    print(f"Balance: {balance}")
 
+    # Expense categories
+    expense_by_category = entries.filter(entry_type='expense').values('category__name').annotate(total=Sum('amount'))
+    print("\n=== EXPENSE CATEGORIES ===")
+    for item in expense_by_category:
+        print(f"{item['category__name'] or 'Uncategorized'}: {item['total']}")
+
+    # Monthly trends
     try:
         monthly_data = (
             Entry.objects.filter(user=user)
@@ -33,6 +45,10 @@ def dashboard_view(request):
             .annotate(total=Sum('amount'))
             .order_by('date__year', 'date__month')
         )
+
+        print("\n=== RAW MONTHLY DATA ===")
+        for data in monthly_data:
+            print(data)
 
         monthly_income = {}
         monthly_expenses = {}
@@ -44,11 +60,21 @@ def dashboard_view(request):
             else:
                 monthly_expenses[month_label] = monthly_expenses.get(month_label, 0) + float(data['total'])
 
+        print("\n=== PROCESSED MONTHLY DATA ===")
+        print("Income by month:", monthly_income)
+        print("Expenses by month:", monthly_expenses)
+
         all_months = sorted(set(monthly_income.keys()) | set(monthly_expenses.keys()))
         income_data = [monthly_income.get(month, 0) for month in all_months]
         expense_data = [monthly_expenses.get(month, 0) for month in all_months]
+
+        print("\n=== CHART DATA ===")
+        print("All months:", all_months)
+        print("Income data:", income_data)
+        print("Expense data:", expense_data)
+
     except Exception as e:
-        print(f"Error processing monthly data: {e}")
+        print(f"\n!!! Error processing monthly data: {e}")
         all_months = []
         income_data = []
         expense_data = []
@@ -57,11 +83,18 @@ def dashboard_view(request):
         'total_income': total_income,
         'total_expenses': total_expenses,
         'balance': balance,
-        'categories': json.dumps(categories),
-        'amounts': json.dumps(amounts),
+        'categories': json.dumps([item['category__name'] or 'Uncategorized' for item in expense_by_category]),
+        'amounts': json.dumps([float(item['total']) for item in expense_by_category]),
         'months': json.dumps(all_months),
         'monthly_income': json.dumps(income_data),
         'monthly_expenses': json.dumps(expense_data),
     }
+
+    print("\n=== FINAL CONTEXT ===")
+    for key, value in context.items():
+        if key in ['categories', 'amounts', 'months', 'monthly_income', 'monthly_expenses']:
+            print(f"{key}: (JSON data - length {len(value)})")
+        else:
+            print(f"{key}: {value}")
 
     return render(request, 'dashboard/dashboard.html', context)
