@@ -77,61 +77,226 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   }
   
-  // Form submission
-  document.getElementById('submit-btn').addEventListener('click', function() {
-      const entryName = document.getElementById('entry-name').value;
-      const category = document.getElementById('category').value;
-      const notes = document.getElementById('notes').value;
-      const amount = currentValue;
-      const type = document.getElementById('income-btn').classList.contains('active') ? 'income' : 'expense';
-      
-      if (!entryName) {
-          alert('Please enter a title for this entry');
-          return;
-      }
-      
-      if (!category) {
-          alert('Please select a category');
-          return;
-      }
-      
-      if (!amount) {
-          alert('Please enter an amount');
-          return;
-      }
-      
-      // Create entry object
-      const entry = {
-          title: entryName,
-          category: category,
-          date: document.getElementById('date').value,
-          notes: notes,
-          amount: amount,
-          type: type,
-          timestamp: new Date().getTime()
-      };
-      
-      // Save entry to localStorage
-      saveExpenseEntry(entry);
-      
-      // Log the entry for debugging
-      console.log('Entry added:', entry);
-      
-      // Update chart if it exists
-      if (document.getElementById('expense-pie-chart')) {
-          updateChartWithRealData();
-      }
-      
-      alert('Entry added successfully!');
-      
-      // Reset form
-      document.getElementById('entry-name').value = '';
-      document.getElementById('category').selectedIndex = 0;
-      document.getElementById('notes').value = '';
-      currentValue = '';
-      document.getElementById('amount-display').textContent = '₱';
+  // Form validation and submission
+  document.getElementById('submit-btn').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent default form submission
+    
+    // Get form elements
+    const entryNameField = document.getElementById('entry-name');
+    const categoryField = document.getElementById('category');
+    const notesField = document.getElementById('notes');
+    const amountDisplay = document.getElementById('amount-display');
+    
+    // Get values
+    const entryName = entryNameField.value;
+    const category = categoryField.value;
+    const notes = notesField.value;
+    const amount = currentValue;
+    const type = document.getElementById('income-btn').classList.contains('active') ? 'income' : 'expense';
+    
+    // Clear previous error states
+    clearValidationErrors();
+    
+    // Validate form fields
+    let isValid = true;
+    
+    if (!entryName) {
+        showValidationError(entryNameField, 'Please enter a title for this entry');
+        isValid = false;
+    }
+    
+    if (!category) {
+        showValidationError(categoryField, 'Please select a category');
+        isValid = false;
+    }
+    
+    if (!amount) {
+        amountDisplay.parentElement.classList.add('error-field');
+          
+        // Add focus/click event listener to clear error when user interacts with the amount field
+        amountDisplay.parentElement.addEventListener('click', function() {
+            this.classList.remove('error-field');
+        }, { once: true });
+        
+        isValid = false;
+    }
+    
+    // If validation fails, stop here
+    if (!isValid) {
+        // Scroll to the first error
+        const firstError = document.querySelector('.error-message');
+        if (firstError) {
+            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+    }
+    
+    // Create entry object
+    const entry = {
+        title: entryName,
+        category: category,
+        date: document.getElementById('date').value,
+        notes: notes,
+        amount: amount,
+        type: type,
+        timestamp: new Date().getTime()
+    };
+    
+    // Save entry to localStorage
+    saveExpenseEntry(entry);
+    
+    // Log the entry for debugging
+    console.log('Entry added:', entry);
+    
+    // Update chart if it exists
+    if (document.getElementById('expense-pie-chart')) {
+        updateChartWithRealData();
+    }
+    
+    // Show success message
+    showSuccessMessage('Entry added successfully!');
+    
+    // Reset form
+    resetForm();
   });
+
+  // Function to show validation error
+  function showValidationError(element, message) {
+    // Add error class to highlight the field
+    element.classList.add('error-field');
+    
+    // Create error message element
+    const errorMessage = document.createElement('div');
+    errorMessage.className = 'error-message';
+    errorMessage.textContent = message;
+    errorMessage.style.color = '#d9534f';
+    errorMessage.style.fontSize = '0.85rem';
+    errorMessage.style.marginTop = '0.25rem';
+    
+    // Insert error message after the element
+    element.parentNode.insertBefore(errorMessage, element.nextSibling);
+    
+    // Add focus event listener to clear error when user interacts with the field
+    element.addEventListener('focus', function() {
+        this.classList.remove('error-field');
+        const nextSibling = this.nextSibling;
+        if (nextSibling && nextSibling.classList && nextSibling.classList.contains('error-message')) {
+            nextSibling.remove();
+        }
+    }, { once: true });
+  }
+
+  // Function to clear all validation errors
+  function clearValidationErrors() {
+    // Remove error class from all elements
+    const errorFields = document.querySelectorAll('.error-field');
+    errorFields.forEach(field => field.classList.remove('error-field'));
+    
+    // Remove all error messages
+    const errorMessages = document.querySelectorAll('.error-message');
+    errorMessages.forEach(message => message.remove());
+  }
+
+  // Function to show success message
+  function showSuccessMessage(message) {
+    // Create toast container if it doesn't exist
+    let toastContainer = document.getElementById('toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'toast-container';
+        toastContainer.style.position = 'fixed';
+        toastContainer.style.bottom = '1rem';
+        toastContainer.style.right = '1rem';
+        toastContainer.style.zIndex = '1000';
+        document.body.appendChild(toastContainer);
+    }
+    
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = 'success-toast';
+    toast.textContent = message;
+    toast.style.backgroundColor = '#5cb85c';
+    toast.style.color = 'white';
+    toast.style.padding = '0.75rem 1.25rem';
+    toast.style.borderRadius = '0.25rem';
+    toast.style.marginTop = '0.5rem';
+    toast.style.boxShadow = '0 0.25rem 0.75rem rgba(0, 0, 0, 0.1)';
+    toast.style.opacity = '0';
+    toast.style.transition = 'opacity 0.3s ease-in-out';
+    
+    // Add toast to container
+    toastContainer.appendChild(toast);
+    
+    // Trigger reflow to enable animation
+    void toast.offsetWidth;
+    
+    // Show toast
+    toast.style.opacity = '1';
+    
+    // Remove toast after 3 seconds
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 3000);
+  }
+
+  // Function to reset form
+  function resetForm() {
+    document.getElementById('entry-name').value = '';
+    document.getElementById('category').selectedIndex = 0;
+    document.getElementById('notes').value = '';
+    currentValue = '';
+    document.getElementById('amount-display').textContent = '₱';
+  }
+
+  // Add CSS for error styling
+  (function addErrorStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+        .error-field {
+            border-color: #d9534f !important;
+            box-shadow: 0 0 0 0.2rem rgba(217, 83, 79, 0.25) !important;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(1rem); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .success-toast {
+            animation: slideIn 0.3s ease-in-out;
+        }
+    `;
+    document.head.appendChild(style);
+  })();
+  initSidebar();
 });
+
+// Toggle sidebar functionality
+function initSidebar() {
+  console.log("Initializing sidebar toggle...");
+  
+  const toggleButton = document.getElementById('toggle-sidebar');
+  if (!toggleButton) {
+    console.warn("Sidebar toggle button not found");
+    return;
+  }
+  
+  toggleButton.addEventListener('click', function() {
+    console.log("Sidebar toggle button clicked");
+    const sidebar = document.querySelector('.sidebar');
+    const container = document.querySelector('.container');
+    
+    if (sidebar && container) {
+      sidebar.classList.toggle('active');
+      container.classList.toggle('sidebar-active');
+    } else {
+      console.error("Sidebar or container elements not found");
+    }
+  });
+}
 
 // Calculator functionality
 let currentValue = "";
@@ -242,15 +407,13 @@ function getChartData() {
   
   // Define category colors - match these with your icons
   const categoryColors = {
-      'food': '#ebe986',
-      'transportation': '#c5bfe0',
-      'bills': '#e5d8c9',
-      'grocery': '#b5e8f7',
-      'health': '#f4b9b9',
-      'entertainment': '#e3cd74',
-      'other_expense': '#f4c572',
-      'housing': '#a2d2a4',
-      'utilities': '#c2e8ce'
+      'food': '#f6f3a9',
+      'transportation': '#d5d1e9',
+      'bills': '#e7d7ca',
+      'grocery': '#d5f6fb',
+      'health': '#f1beb5',
+      'eating out' : '#e7d27c',
+      'gifts': '#f8c57c',
   };
   
   const labels = Object.keys(categoryTotals);
@@ -273,17 +436,17 @@ let expensePieChart;
 function initializeExpenseChart() {
   // Sample data for initial rendering
   const initialData = {
-      labels: ['Food', 'Transportation', 'Bills', 'Grocery', 'Health', 'Entertainment', 'Other'],
+      labels: ['Food', 'Transportation', 'Bills', 'Grocery', 'Health', 'Eating Out', 'Gifts'],
       datasets: [{
           data: [25, 15, 20, 18, 7, 10, 5], // Sample percentages
           backgroundColor: [
-              '#ebe986', // Food
-              '#c5bfe0', // Transportation
-              '#e5d8c9', // Bills
-              '#b5e8f7', // Grocery
-              '#f4b9b9', // Health
-              '#e3cd74', // Entertainment
-              '#f4c572'  // Other
+              '#f6f3a9', // Food
+              '#d5d1e9', // Transportation
+              '#e7d7ca', // Bills
+              '#d5f6fb', // Grocery
+              '#f1beb5', // Health
+              '#e7d27c', // Eating Out
+              '#f8c57c'  // Gifts
           ],
           borderWidth: 0
       }]

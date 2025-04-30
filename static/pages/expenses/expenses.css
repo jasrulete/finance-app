@@ -375,26 +375,30 @@ option {
 }
 
 @media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-        width: 100%;
+    .sidebar {
+      position: fixed;
+      top: auto;
+      left: 0;
+      height: 100%;
+      z-index: 1000;
+      transform: translateX(-250px);
+      transition: transform 0.3s ease; /* Smooth transition */
+    }
+
+    .sidebar.active {
+      transform: translateY(0); /* Slide in when active */
+    }
+
+    .main-content {
+      width: 100%;
     }
 
     .user-info {
         padding-right: 0.5rem;
     }
 
-    .sidebar {
-        width: 100%;
-        left: -100%;
-    }
-
     .main-content {
         width: 100%;
-    }
-
-    .sidebar.active {
-        transform: translateX(0px); /* Slide in from the left */
     }
 
     .welcome-message h1 {
