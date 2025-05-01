@@ -26,7 +26,7 @@
   <body>
     <!-- Header -->
     <header class="header" role="banner">
-      <a href="{% url 'dashboard' %}" class="logo-text">
+      <a href="{% url 'dashboard' %}">
         <div class="logo">
           <div class="logo-icon">
             <img
@@ -35,7 +35,7 @@
               class="logo-img"
             />
           </div>
-          <div>BudgetWise</div>
+          <div class="logo-text">BudgetWise</div>
         </div>
       </a>
       <div class="user-profile">
@@ -58,8 +58,8 @@
     <!-- Container -->
     <div class="container">
       <!-- Sidebar -->
-      <aside class="sidebar">
-        <a href="{% url 'dashboard' %}" class="logo-text">
+      <aside class="sidebar" role="complementary">
+        <a href="{% url 'dashboard' %}">
           <div class="menu-item">
             <span class="material-icons">dashboard</span><span>Dashboard</span>
           </div>
@@ -71,9 +71,9 @@
           <span class="material-icons">work_history</span
           ><span>Transactions</span>
         </div>
-          <div class="menu-item">
-            <span class="material-icons">file_download</span><span>Export</span>
-          </div>
+        <div class="menu-item">
+          <span class="material-icons">file_download</span><span>Export</span>
+        </div>
       </aside>
 
       <!-- Main Content -->
@@ -139,7 +139,8 @@
             >
             {% endif %}
             <span
-              >Page {{ income_page.number }} of {{ income_page.paginator.num_pages }}</span
+              >Page {{ income_page.number }} of
+              {{income_page.paginator.num_pages }}</span
             >
             {% if income_page.has_next %}
             <a href="?income_page={{ income_page.next_page_number }}"
@@ -198,7 +199,8 @@
             >
             {% endif %}
             <span
-              >Page {{ expense_page.number }} of {{ expense_page.paginator.num_pages }}</span
+              >Page {{ expense_page.number }} of
+              {{expense_page.paginator.num_pages }}</span
             >
             {% if expense_page.has_next %}
             <a href="?expense_page={{ expense_page.next_page_number }}"
