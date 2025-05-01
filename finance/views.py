@@ -7,6 +7,8 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from django.db.models import Q
+from datetime import datetime
+import csv
 
 #!-- Commented out to avoid circular import issues --!#
 # @never_cache 
@@ -89,3 +91,54 @@ def get_filtered_categories(request):
 
     data = [{'id': cat.id, 'name': cat.name} for cat in categories]
     return JsonResponse({'categories': data})
+
+@never_cache
+@login_required
+def export_entries(request):
+    if request.method == "POST":
+        filename = request.POST.get("filename", f"export_{datetime.now().strftime('%Y%m%d')}")
+        entry_type = request.POST.get("entry_type")
+        category_id = request.POST.get("category")
+        start_date = request.POST.get("start_date")
+        end_date = request.POST.get("end_date")
+
+        # ✅ Early check: end date cannot be before start date
+        if start_date and end_date and end_date < start_date:
+            categories = Category.objects.filter(user=request.user) | Category.objects.filter(is_default=True)
+            return render(request, "finance/export.html", {
+                "categories": categories,
+                "error": "End date cannot be earlier than start date."
+            })
+
+        entries = Entry.objects.filter(user=request.user)
+
+        if entry_type in ['income', 'expense']:
+            entries = entries.filter(entry_type=entry_type)
+
+        if category_id:
+            entries = entries.filter(category_id=category_id)
+
+        if start_date:
+            entries = entries.filter(date__gte=start_date)
+        if end_date:
+            entries = entries.filter(date__lte=end_date)
+
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = f'attachment; filename="{filename}.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(["Title", "Type", "Category", "Date", "Amount", "Notes"])
+        for entry in entries:
+            writer.writerow([
+                entry.title,
+                entry.entry_type,
+                entry.category.name if entry.category else "",
+                entry.date,
+                entry.amount,
+                entry.notes or ""
+            ])
+
+        return response
+
+    categories = Category.objects.filter(user=request.user) | Category.objects.filter(is_default=True)
+    return render(request, "finance/export.html", {"categories": categories})
