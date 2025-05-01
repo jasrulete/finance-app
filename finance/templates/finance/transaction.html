@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BudgetWise - Transactions</title>
+    <title>Transactions</title>
 
     <link
       rel="stylesheet"
@@ -12,79 +12,87 @@
     />
     <link rel="stylesheet" href="{% static 'css/colors.css' %}" />
 
-    <!-- Google Font (K2D) -->
-    {% comment %}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fonts & Icons -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Fredoka:wdth@75..125&family=K2D:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=K2D:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    {% endcomment %}
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <a href="{% url 'login' %}" class="logo">
-        <img src="{% static 'pics/mockLogo.png' %}" alt="BudgetWise Logo" />
-        <h2>BudgetWise</h2>
-      </a>
-      <nav>
-        <a href="{% url 'dashboard' %}">
-          <img src="{% static 'pics/dashboard.png' %}" alt="Dashboard Icon" />
-          Dashboard
-        </a>
-        <a href="{% url 'dashboard' %}">
-          <img src="{% static 'pics/expenses.png' %}" alt="Expenses Icon" />
-          Expenses
-        </a>
-        <a href="{% url 'dashboard' %}">
-          <img
-            src="{% static 'pics/transactions.png' %}"
-            alt="Transactions Icon"
-          />
-          Transactions
-        </a>
-        <a href="{% url 'dashboard' %}">
-          <img src="{% static 'pics/export.png' %}" alt="Export Icon" />
-          Export
-        </a>
-      </nav>
-    </div>
-
-    <!-- Right panel -->
-    <div class="main-content">
-      <header class="user-info">
-        <a href="{% url 'dashboard' %}">
-          <img
-            src="{% static 'pics/user.png' %}"
-            alt="User Profile"
-            class="profile-pic"
-          />
-        </a>
-        <div class="user-details">
-          <a href="{% url 'dashboard' %}">
-            <p class="username">John Doe</p>
-          </a>
-          <a href="/logout" class="logout">Log Out</a>
-        </div>
-      </header>
-
-      <section class="transactions-section">
-        <h1 class="section-title">Transactions</h1>
-        <p class="subtitle">Easily review and manage your financial history.</p>
-
-        <!-- Income Section -->
-        <div class="transactions-block">
-          <h2 class="block-title">
+    <!-- Header -->
+    <header class="header" role="banner">
+      <a href="{% url 'dashboard' %}" class="logo-text">
+        <div class="logo">
+          <div class="logo-icon">
             <img
-              src="{% static 'pics/income.png' %}"
-              alt="Income Icon"
-              class="block-icon"
+              src="{% static 'pics/mockLogo.png' %}"
+              alt="BudgetWise Logo"
+              class="logo-img"
+              id="toggle-sidebar"
             />
-            Income
-          </h2>
+          </div>
+          <div>BudgetWise</div>
+        </div>
+      </a>
+      <div class="user-profile">
+        <div class="user-avatar">
+          <img
+            src="/static/pics/user1.png"
+            alt="User Avatar"
+            class="avatar-image"
+          />
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ user.username }}</span>
+          <a class="btn btn-outline-light ms-2" href="{% url 'logout' %}"
+            >Logout</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <!-- Container -->
+    <div class="container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <a href="{% url 'dashboard' %}" class="logo-text">
+          <div class="menu-item">
+            <span class="material-icons">dashboard</span><span>Dashboard</span>
+          </div>
+        </a>
+        <div class="menu-item">
+          <span class="material-icons">payments</span><span>Expenses</span>
+        </div>
+        <div class="menu-item active">
+          <span class="material-icons">work_history</span
+          ><span>Transactions</span>
+        </div>
+        <div class="menu-item">
+          <span class="material-icons">file_download</span><span>Export</span>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="welcome-message">
+          <h1>Transactions</h1>
+          <p>Easily review and manage your financial history.</p>
+        </div>
+
+        <div class="add-entry-container">
+          <button class="add-entry-button" onclick="openEntryModalForCreate()">
+            + Add Entry
+          </button>
+        </div>
+
+        <!-- Income Block -->
+        <div class="transactions-card">
+          <h2><span class="material-icons">trending_up</span> Income</h2>
           <table>
             <thead>
               <tr>
@@ -107,29 +115,33 @@
                   <a onclick="openEntryModal({{ entry.id }})">
                     <img src="{% static 'pics/edit.png' %}" alt="Edit Icon" />
                   </a>
-                  <a onclick="openDeleteModal('{{ entry.title }}', '{% url 'finance:entry-delete' entry.id %}')">
-                    <img src="{% static 'pics/trash.png' %}" alt="Delete Icon" />
-                  </a>                  
+                  <a
+                    onclick="openDeleteModal('{{ entry.title }}', '{% url 'finance:entry-delete' entry.id %}')"
+                  >
+                    <img
+                      src="{% static 'pics/trash.png' %}"
+                      alt="Delete Icon"
+                    />
+                  </a>
                 </td>
               </tr>
               {% empty %}
               <tr>
-                <td colspan="6" class="text-center">
-                  No income entries found.
-                </td>
+                <td colspan="6">No income entries found.</td>
               </tr>
               {% endfor %}
             </tbody>
           </table>
-          <div class="pagination">
+
+          <div class="transaction-pagination">
             {% if income_page.has_previous %}
             <a href="?income_page={{ income_page.previous_page_number }}"
               >&laquo; Prev</a
             >
             {% endif %}
             <span
-              >Page {{ income_page.number }} of {{ income_page.paginator.num_pages }}
-            </span>
+              >Page {{ income_page.number }} of {{ income_page.paginator.num_pages }}</span
+            >
             {% if income_page.has_next %}
             <a href="?income_page={{ income_page.next_page_number }}"
               >Next &raquo;</a
@@ -138,16 +150,9 @@
           </div>
         </div>
 
-        <!-- Expenses Section -->
-        <div class="transactions-block">
-          <h3 class="block-title">
-            <img
-              src="{% static 'pics/expense-list.png' %}"
-              alt="Expenses Icon"
-              class="block-icon"
-            />
-            Expenses
-          </h3>
+        <!-- Expense Block -->
+        <div class="transactions-card">
+          <h2><span class="material-icons">receipt_long</span> Expenses</h2>
           <table>
             <thead>
               <tr>
@@ -167,10 +172,12 @@
                 <td>PHP {{ entry.amount }}</td>
                 <td>{{ entry.notes }}</td>
                 <td class="actions">
-                  <a href="{% url 'finance:entry-update' entry.id %}">
+                  <a onclick="openEntryModal({{ entry.id }})">
                     <img src="{% static 'pics/edit.png' %}" alt="Edit Icon" />
                   </a>
-                  <a href="{% url 'finance:entry-delete' entry.id %}">
+                  <a
+                    onclick="openDeleteModal('{{ entry.title }}', '{% url 'finance:entry-delete' entry.id %}')"
+                  >
                     <img
                       src="{% static 'pics/trash.png' %}"
                       alt="Delete Icon"
@@ -180,22 +187,20 @@
               </tr>
               {% empty %}
               <tr>
-                <td colspan="6" class="text-center">
-                  No expense entries found.
-                </td>
+                <td colspan="6">No expense entries found.</td>
               </tr>
               {% endfor %}
             </tbody>
           </table>
-          <div class="pagination">
+          <div class="transaction-pagination">
             {% if expense_page.has_previous %}
             <a href="?expense_page={{ expense_page.previous_page_number }}"
               >&laquo; Prev</a
             >
             {% endif %}
-            <span>
-              Page {{ expense_page.number }} of {{ expense_page.paginator.num_pages }}
-            </span>
+            <span
+              >Page {{ expense_page.number }} of {{ expense_page.paginator.num_pages }}</span
+            >
             {% if expense_page.has_next %}
             <a href="?expense_page={{ expense_page.next_page_number }}"
               >Next &raquo;</a
@@ -203,21 +208,18 @@
             {% endif %}
           </div>
         </div>
-        <!-- Edit Entry Modal -->
-        <div id="entryModal" class="modal">
+
+        <!-- Modals -->
+        <div id="entryModal" class="modal" style="display: none">
           <div class="modal-content">
             <span class="close" onclick="closeEntryModal()">&times;</span>
-            <h2>Edit Entry</h2>
             <form id="entry-form" method="POST">
               {% csrf_token %}
-              <!-- Dynamically load form content -->
               <div id="entry-form-body"></div>
-              <button type="submit" class="save-button">Save Changes</button>
             </form>
           </div>
         </div>
 
-        <!-- Delete Confirmation Modal -->
         <div id="deleteModal" class="modal">
           <div class="modal-content danger">
             <h3>Delete Entry?</h3>
@@ -226,7 +228,9 @@
               sure?
             </p>
             <div class="modal-actions">
-              <button onclick="closeDeleteModal()">Cancel</button>
+              <button onclick="closeDeleteModal()" class="cancel-button">
+                Cancel
+              </button>
               <form method="POST" id="delete-form">
                 {% csrf_token %}
                 <button type="submit" class="delete-button">Delete</button>
@@ -234,8 +238,9 @@
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
+
     <script>
       function openEntryModal(entryId) {
         fetch(`/finance/edit/${entryId}/`)
@@ -253,9 +258,19 @@
         document.getElementById("entryModal").style.display = "none";
       }
 
-      function openDeleteModal(entryTitle, deleteUrl) {
-        document.getElementById("entry-title").textContent = entryTitle;
-        document.getElementById('delete-form').action = deleteUrl;
+      function openEntryModalForCreate() {
+        fetch(`/finance/add/`)
+          .then((response) => response.text())
+          .then((html) => {
+            document.getElementById("entry-form-body").innerHTML = html;
+            document.getElementById("entry-form").action = `/finance/add/`;
+            document.getElementById("entryModal").style.display = "flex";
+          });
+      }
+
+      function openDeleteModal(title, url) {
+        document.getElementById("entry-title").textContent = title;
+        document.getElementById("delete-form").action = url;
         document.getElementById("deleteModal").style.display = "flex";
       }
 
@@ -263,13 +278,41 @@
         document.getElementById("deleteModal").style.display = "none";
       }
 
-      // Optional: Close modal when clicking outside it
       window.onclick = function (event) {
         if (event.target.classList.contains("modal")) {
           closeEntryModal();
           closeDeleteModal();
         }
       };
+
+      document.addEventListener('change', function (e) {
+        if (e.target && e.target.id === 'id_entry_type') {
+          const entryType = e.target.value;
+          console.log("Selected Entry Type:", entryType);  // 👈 Debug log
+          fetch(`/finance/get-categories/?entry_type=${entryType}`)
+            .then(response => response.json())
+            .then(data => {
+              const categorySelect = document.getElementById('id_category');
+              categorySelect.innerHTML = '<option value="">---------</option>';
+              data.categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.id;
+                option.textContent = cat.name;
+                categorySelect.appendChild(option);
+              });
+            });
+        }
+      });
+      
+
+      {% comment %} document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".calc-pad button").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const amountInput = document.querySelector("#id_amount");
+            if (amountInput) amountInput.value += btn.textContent;
+          });
+        });
+      }); {% endcomment %}
     </script>
   </body>
 </html>

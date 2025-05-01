@@ -9,4 +9,5 @@ urlpatterns = [
     path('add/', entry_create, name='entry-create'),
     path('edit/<int:pk>/', entry_update, name='entry-update'),
     path('delete/<int:pk>/', entry_delete, name='entry-delete'),
+    path('get-categories/', get_filtered_categories, name='get-categories'),
 ]
