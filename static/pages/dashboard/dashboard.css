@@ -15,10 +15,6 @@
     border-bottom: 1px solid var(--primary);
 }
 
-.header a {
-    text-decoration: none;
-}
-
 .logo {
     display: flex;
     flex-direction: row;
