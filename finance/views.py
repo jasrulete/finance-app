@@ -216,3 +216,8 @@ def export_entries(request):
 
     categories = Category.objects.filter(user=request.user) | Category.objects.filter(is_default=True)
     return render(request, "finance/export.html", {"categories": categories})
+
+@never_cache
+@login_required
+def expenses_page(request):
+    return render(request, 'finance/expenses.html')
