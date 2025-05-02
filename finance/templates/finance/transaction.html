@@ -67,13 +67,17 @@
         <div class="menu-item">
           <span class="material-icons">payments</span><span>Expenses</span>
         </div>
-        <div class="menu-item active">
-          <span class="material-icons">work_history</span
-          ><span>Transactions</span>
-        </div>
-        <div class="menu-item">
-          <span class="material-icons">file_download</span><span>Export</span>
-        </div>
+        <a href="{% url 'finance:entry-list' %}">
+          <div class="menu-item active">
+            <span class="material-icons">work_history</span>
+            <span>Transactions</span>
+          </div>
+        </a>
+        <a href="{% url 'finance:entry-export' %}">
+          <div class="menu-item">
+            <span class="material-icons">file_download</span><span>Export</span>
+          </div>
+        </a>
       </aside>
 
       <!-- Main Content -->
