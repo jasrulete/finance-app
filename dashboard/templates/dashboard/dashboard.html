@@ -86,52 +86,60 @@ var barChart = new Chart(ctx2, {
   
 </head>
 <body>
-
   <header class="header" role="banner">
-    <div class="logo">
-      <div class="logo-icon">
-        <img src="/static/pics/mockLogo.png" alt="BudgetWise Logo" class="logo-img" id="toggle-sidebar">
+    <a href="{% url 'dashboard' %}">
+      <div class="logo">
+        <div class="logo-icon">
+          <img
+            src="{% static 'pics/mockLogo.png' %}"
+            alt="BudgetWise Logo"
+            class="logo-img"
+          />
+        </div>
+        <div class="logo-text">BudgetWise</div>
       </div>
-      <div class="logo-text">BudgetWise</div>
-    </div>
+    </a>
     <div class="user-profile">
       <div class="user-avatar">
-        <img src="/static/pics/user1.png" alt="User Avatar" class="avatar-image">
+        <img
+          src="{% static 'pics/user1.png' %}"
+          alt="User Avatar"
+          class="avatar-image"
+        />
       </div>
       <div class="user-info">
-        <!--Retrieve user's name from backend-->
-            <span class="user-name">{{ user.username }}</span>
-            <a class="btn btn-outline-light ms-2" href="{% url 'logout' %}">Logout</a>
+        <span class="user-name">{{ user.username }}</span>
+        <a class="btn btn-outline-light ms-2" href="{% url 'logout' %}"
+          >Logout</a
+        >
       </div>
     </div>
   </header>
 
   <div class="container">
     <aside class="sidebar" role="complementary">
-        <div class="menu-item active">
-        <div class="menu-icon">
-            <span class="material-icons">dashboard</span>
-        </div>
-        <span>Dashboard</span>
-        </div>
+      <a href="{% url 'dashboard' %}">
         <div class="menu-item">
+          <span class="material-icons">dashboard</span><span>Dashboard</span>
+        </div>
+      </a>
+      <div class="menu-item">
         <div class="menu-icon">
             <span class="material-icons">payments</span>
         </div>
         <span>Expenses</span>
-        </div>
+      </div>
+      <a href="{% url 'finance:entry-list' %}">
         <div class="menu-item">
-        <div class="menu-icon">
-            <span class="material-icons">work_history</span>
+          <span class="material-icons">work_history</span>
+          <span>Transactions</span>
         </div>
-        <span>Transactions</span>
-        </div>
+      </a>
+      <a href="{% url 'finance:entry-export' %}">
         <div class="menu-item">
-        <div class="menu-icon">
-            <span class="material-icons">file_download</span>
+          <span class="material-icons">file_download</span><span>Export</span>
         </div>
-        <span>Export</span>
-        </div>
+      </a>
     </aside>
 
     <div class="main-content" role="main">
