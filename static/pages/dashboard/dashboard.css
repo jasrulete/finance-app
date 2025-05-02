@@ -13,6 +13,11 @@
     padding: 20px;
     background-color: var(--secondary);
     border-bottom: 1px solid var(--primary);
+    min-width: 553px;
+}
+
+.header a {
+    text-decoration: none;
 }
 
 .logo {
@@ -31,6 +36,7 @@
     font-weight: 500;
     padding-left: 5px;
     color: var(--white);
+    text-decoration: none;
 }
 
 #toggle-sidebar {
@@ -79,6 +85,10 @@
     width: 250px;
     left: -250px;
 }
+
+.sidebar a {
+    text-decoration: none;
+  }
 
 .menu-item {
     display: flex;
@@ -415,7 +425,7 @@ h2 {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 828px) {
     .sidebar {
         position: fixed; /* Fixed position so it overlays content */
         top: 150px;
@@ -425,6 +435,10 @@ h2 {
         transform: translateX(-250px); /* Hidden by default */
         transition: transform 0.3s ease; /* Smooth transition */
     }
+
+    .header{
+        min-width: 620px;
+    }
     
     .sidebar.active {
         transform: translateX(0); /* Slide in when active */
@@ -432,6 +446,7 @@ h2 {
     
     .main-content {
         width: 100%; /* Full width when sidebar is hidden */
+        min-width: 620px; /* Minimum width to prevent overflow */
     }
 
     .overview-container h2 {
