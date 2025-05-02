@@ -64,9 +64,11 @@
             <span class="material-icons">dashboard</span><span>Dashboard</span>
           </div>
         </a>
-        <div class="menu-item">
-          <span class="material-icons">payments</span><span>Expenses</span>
-        </div>
+        <a href="{% url 'finance:expenses-page' %}">
+          <div class="menu-item">
+            <span class="material-icons">payments</span><span>Expenses</span>
+          </div>
+        </a>
         <a href="{% url 'finance:entry-list' %}">
           <div class="menu-item active">
             <span class="material-icons">work_history</span>
