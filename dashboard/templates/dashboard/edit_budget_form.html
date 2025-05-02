@@ -1,0 +1,44 @@
+{% csrf_token %}
+
+<form method="POST" id="budget-form">
+    {% csrf_token %}
+    
+    <div class="budget-category">
+        <label for="{{ form.bills.id_for_label }}">BILLS</label>
+        {{ form.bills }}
+    </div>
+
+    <div class="budget-category">
+        <label for="{{ form.grocery.id_for_label }}">GROCERY</label>
+        {{ form.grocery }}
+    </div>
+
+    <div class="budget-category">
+        <label for="{{ form.food.id_for_label }}">FOOD</label>
+        {{ form.food }}
+    </div>
+
+    <div class="budget-category">
+        <label for="{{ form.health.id_for_label }}">HEALTH</label>
+        {{ form.health }}
+    </div>
+
+    <div class="budget-category">
+        <label for="{{ form.eatingout.id_for_label }}">EATING OUT</label>
+        {{ form.eatingout }}
+    </div>
+
+    <div class="budget-category">
+        <label for="{{ form.transportation.id_for_label }}">TRANSPORTATION</label>
+        {{ form.transportation }}
+    </div>
+
+    <div class="budget-category">
+        <label for="{{ form.gifts.id_for_label }}">GIFTS</label>
+        {{ form.gifts }}
+    </div>
+
+    <div class="save-button-container">
+        <button type="submit" class="save-button">Save Changes</button>
+    </div>
+</form>

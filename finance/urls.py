@@ -11,4 +11,7 @@ urlpatterns = [
     path('delete/<int:pk>/', entry_delete, name='entry-delete'),
     path('get-categories/', get_filtered_categories, name='get-categories'),
     path('export/', export_entries, name='entry-export'),
+    path('edit-budget/<int:budget_id>/', edit_budget, name='edit-budget-form'),
+    path('create-budget/', create_budget, name='create-budget'),
+    path('check-budget/', check_budget_exists, name='check-budget'),
 ]
