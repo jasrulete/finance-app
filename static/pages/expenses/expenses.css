@@ -398,18 +398,16 @@ option {
 }
 
 @media (max-width: 768px) {
-    .sidebar {
-      position: fixed;
-      top: auto;
-      left: 0;
-      height: 100%;
-      z-index: 1000;
-      transform: translateX(-250px);
-      transition: transform 0.3s ease; /* Smooth transition */
+    .header {
+        min-width: 0;
     }
 
-    .sidebar.active {
-      transform: translateY(0); /* Slide in when active */
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
     }
 
     .main-content {
