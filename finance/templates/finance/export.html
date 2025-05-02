@@ -99,7 +99,7 @@
             </div>
   
             <label class= "label">Category</label>
-            <select name="category">
+            <select name="category" id="category-select">
               <option value="">Select Category</option>
               {% for cat in categories %}
                 <option value="{{ cat.id }}">{{ cat.name }}</option>
@@ -123,6 +123,31 @@
         
         startInput.addEventListener("change", validateDates);
         endInput.addEventListener("change", validateDates);
+    </script>
+    <script>
+      // Dynamic category filtering based on entry type
+      document.querySelectorAll('input[name="entry_type"]').forEach((radio) => {
+        radio.addEventListener("change", function () {
+          const entryType = this.value;
+          const categorySelect = document.getElementById("category-select");
+    
+          // Fetch filtered categories
+          fetch(`/finance/get-categories/?entry_type=${entryType}`)
+            .then((response) => response.json())
+            .then((data) => {
+              // Clear existing options
+              categorySelect.innerHTML = '<option value="">Select Category</option>';
+    
+              // Populate new filtered categories
+              data.categories.forEach((cat) => {
+                const option = document.createElement("option");
+                option.value = cat.id;
+                option.textContent = cat.name;
+                categorySelect.appendChild(option);
+              });
+            });
+        });
+      });
     </script>
   </body>
 </html>
