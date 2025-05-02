@@ -183,18 +183,18 @@ var barChart = new Chart(ctx2, {
         </div>
 
         <div class="overview-container">
-            <h2>Financial Overview this Year</h2>
-                <div class="overview-cards">
-                    <div class="income-overview">
-                <div class="title">
-                  <span class="material-icons">attach_money</span>
-                  <h4>Income</h4>
-                </div>
-                <div class="overview-amount">
-                  <span class="material-icons income">php</span>
-                  PHP {{ total_income }}
-                </div>
-              </div>
+          <h2>Financial Overview this Year</h2>
+                  <div class="overview-cards">
+                      <div class="income-overview">
+                  <div class="title">
+                    <span class="material-icons">attach_money</span>
+                    <h4>Income</h4>
+                  </div>
+                  <div class="overview-amount">
+                    <span class="material-icons income">php</span>
+                    PHP {{ total_income }}
+                  </div>
+            </div>
           
               <div class="expense-overview">
                 <div class="title">
@@ -490,6 +490,20 @@ var barChart = new Chart(ctx2, {
         }
       }
     };
+
+    // Sort months chronologically
+    const combined = financialData.months.map((month, i) => ({
+      month,
+      income: financialData.monthlyIncome[i],
+      expense: financialData.monthlyExpenses[i],
+      date: new Date(month)
+    }));
+
+    combined.sort((a, b) => a.date - b.date);
+
+    financialData.months = combined.map(item => item.month);
+    financialData.monthlyIncome = combined.map(item => item.income);
+    financialData.monthlyExpenses = combined.map(item => item.expense);
 
     // Initialize all charts
     chartManager.initMonthlyComparisonChart(); // Your existing chart
