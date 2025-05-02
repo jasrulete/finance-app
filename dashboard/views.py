@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from finance.models import Entry
+from finance.models import Entry, Budget, Category
 from django.db.models import Sum
 from django.utils.timezone import now
 from django.contrib.auth.decorators import login_required
@@ -86,6 +86,83 @@ def dashboard_view(request):
         all_months = []
         income_data = []
         expense_data = []
+    
+    # --------- BUDGET USAGE CALCULATION (NEW CODE) ----------
+    try:
+        # Try to get user's budget
+        budget = Budget.objects.get(user=user)
+        
+        # Calculate spending by category for budget comparison
+        category_spending = {}
+        budget_usage = {}
+        
+        # Define mapping between category names and budget model fields
+        category_mapping = {
+            'Bills': 'bills',
+            'Grocery': 'grocery', 
+            'Food': 'food',
+            'Health': 'health',
+            'Eating Out': 'eatingout',
+            'Transportation': 'transportation',
+            'Gifts': 'gifts'
+        }
+        
+        # Initialize all categories with zero spending
+        for display_name, field_name in category_mapping.items():
+            category_spending[field_name] = 0
+        
+        # Get current month expenses by category
+        current_month_expenses = entries.filter(entry_type='expense')
+        
+        # Sum up expenses for each category
+        for category_name, field_name in category_mapping.items():
+            # Look up expenses for this category
+            category_expenses = current_month_expenses.filter(
+                category__name=category_name
+            )
+            
+            if category_expenses.exists():
+                total_spent = category_expenses.aggregate(total=Sum('amount'))['total'] or 0
+                category_spending[field_name] = float(total_spent)
+        
+        print("\n=== BUDGET USAGE ===")
+        
+        # Calculate usage percentage for each category
+        for category_name, field_name in category_mapping.items():
+            spent = category_spending[field_name]
+            budget_amount = getattr(budget, field_name, 0)
+            
+            # Calculate percentage, ensuring we don't divide by zero
+            if budget_amount and budget_amount > 0:
+                percentage = min(int((spent / float(budget_amount)) * 100), 100)
+            else:
+                percentage = 0
+                
+            # Store the percentage
+            js_field_name = field_name.replace('_', '-')
+            budget_usage[js_field_name] = percentage
+            
+            print(f"{category_name}: Spent ${spent} of ${budget_amount} ({percentage}%)")
+        
+        # Calculate overall average percentage
+        if budget_usage:
+            overall_percentage = sum(budget_usage.values()) // len(budget_usage)
+            budget_usage['overall'] = overall_percentage
+            print(f"Overall budget usage: {overall_percentage}%")
+        else:
+            budget_usage['overall'] = 0
+            
+    except Budget.DoesNotExist:
+        print("\n!!! No budget found for user")
+        budget = None
+        category_spending = {}
+        budget_usage = {'overall': 0}
+    except Exception as e:
+        print(f"\n!!! Error calculating budget usage: {e}")
+        budget = None
+        category_spending = {}
+        budget_usage = {'overall': 0}
+    # --------- END OF NEW CODE ----------
 
     context = {
         'total_income': total_income,
@@ -99,6 +176,10 @@ def dashboard_view(request):
         'months': json.dumps(all_months),
         'monthly_income': json.dumps(income_data),
         'monthly_expenses': json.dumps(expense_data),
+        # New context variables for budget usage
+        'budget': budget,
+        'category_spending': category_spending,
+        'budget_usage': budget_usage,
     }
 
     print("\n=== FINAL CONTEXT ===")
