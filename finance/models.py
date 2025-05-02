@@ -71,3 +71,17 @@ class Entry(models.Model):
 
     def type_display(self):
         return dict(self.ENTRY_TYPE_CHOICES).get(self.entry_type, self.entry_type)
+
+class Budget(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    month = models.DateField()
+    bills = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    grocery = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    food = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    health = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    eatingout = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    transportation = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    gifts = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"{self.user.username}'s Budget"

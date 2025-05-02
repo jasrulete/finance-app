@@ -1,5 +1,5 @@
 from django import forms
-from .models import Entry, Category
+from .models import Entry, Category, Budget
 
 class EntryForm(forms.ModelForm):
     class Meta:
@@ -33,3 +33,8 @@ class EntryForm(forms.ModelForm):
         else:
             # Safe fallback if no user is passed
             self.fields['category'].queryset = Category.objects.none()
+
+class BudgetForm(forms.ModelForm):
+    class Meta:
+        model = Budget
+        fields = ['bills', 'grocery', 'food', 'health', 'eatingout', 'transportation', 'gifts']
