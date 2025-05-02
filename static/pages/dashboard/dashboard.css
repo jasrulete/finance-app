@@ -444,6 +444,32 @@ h2 {
 .transportation .progress-bar { background-color: var(--transpo); }
 .gifts .progress-bar { background-color: var(--gifts); }
 
+/* Toast notifications */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    border-radius: 4px;
+    color: white;
+    z-index: 10000;
+    animation: slideIn 0.3s, fadeOut 0.5s 2.5s forwards;
+}
+
+.toast.success { background-color: #4CAF50; }
+.toast.error { background-color: #F44336; }
+.toast.info { background-color: #2196F3; }
+
+@keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
 /* Responsive design */
 @media (max-width: 992px) {
     .dashboard-grid {

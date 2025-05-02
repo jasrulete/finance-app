@@ -339,41 +339,140 @@ var barChart = new Chart(ctx2, {
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   function openBudgetForm() {
-    fetch('/finance/check-budget/')
-      .then((response) => response.json())
-      .then((data) => {
-        const modal = document.getElementById("budgetModal");
-        const formBody = document.getElementById("budget-form-body");
-        
-        if (data.exists) {
-            // Budget exists - load edit form
-            fetch(`/finance/edit-budget/${data.budget_id}/`)
-              .then((response) => response.text())
-              .then((html) => {
-                formBody.innerHTML = html;
-                document.getElementById("budget-form").action = `/finance/edit-budget/${data.budget_id}/`;
-                modal.style.display = "flex";
-              });
-        } else {
-            // No budget exists - load create form
-            fetch('/finance/create-budget/')
-              .then((response) => response.text())
-              .then((html) => {
-                formBody.innerHTML = html;
-                document.getElementById("budget-form").action = '/finance/create-budget/';
-                modal.style.display = "flex";
-              });
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-}
+      fetch('/finance/check-budget/')
+        .then((response) => response.json())
+        .then((data) => {
+          const modal = document.getElementById("budgetModal");
+          const formBody = document.getElementById("budget-form-body");
+          
+          if (data.exists) {
+              // Budget exists - load edit form
+              fetch(`/finance/edit-budget/${data.budget_id}/`)
+                .then((response) => response.text())
+                .then((html) => {
+                  formBody.innerHTML = html;
+                  document.getElementById("budget-form").action = `/finance/edit-budget/${data.budget_id}/`;
+                  modal.style.display = "flex";
+                });
+          } else {
+              // No budget exists - load create form
+              fetch('/finance/create-budget/')
+                .then((response) => response.text())
+                .then((html) => {
+                  formBody.innerHTML = html;
+                  document.getElementById("budget-form").action = '/finance/create-budget/';
+                  modal.style.display = "flex";
+                });
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+  }
 
-// Add close modal function
-function closeModal() {
-    document.getElementById("budgetModal").style.display = "none";
-}
+  // Add close modal function
+  function closeModal() {
+      document.getElementById("budgetModal").style.display = "none";
+  }
+
+  // Improved updateProgressBars function
+  function updateProgressBars(budgetData, isNewBudget = false) {
+      // Update all progress bars
+      const categories = [
+          'bills', 'grocery', 'food', 'health', 
+          'eatingout', 'transportation', 'gifts'
+      ];
+      
+      categories.forEach(category => {
+          const element = document.querySelector(`.${category} .progress-bar`);
+          if (element) {
+              // Calculate percentage - adjust formula as needed
+              const amount = budgetData[category] || 0;
+              const percentage = Math.min((amount / 1000) * 100, 100); // Example: 1000 as max
+              
+              // Animate the progress bar
+              element.style.width = `${percentage}%`;
+              element.setAttribute('data-percentage', percentage.toFixed(0));
+              
+              // If this is a new budget, initialize the UI
+              if (isNewBudget) {
+                  const budgetItem = document.querySelector(`.${category}`);
+                  if (budgetItem) {
+                      budgetItem.style.display = 'flex'; // Make sure it's visible
+                  }
+              }
+          }
+      });
+      
+      // Update the overall budget progress
+      updateOverallProgress();
+  }
+
+  function updateOverallProgress() {
+      // Calculate average progress across all categories
+      const progressBars = document.querySelectorAll('.budget-item:not(.overall) .progress-bar');
+      let totalPercentage = 0;
+      let validCategories = 0;
+      
+      progressBars.forEach(bar => {
+          const percentage = parseFloat(bar.getAttribute('data-percentage')) || 0;
+          totalPercentage += percentage;
+          validCategories++;
+      });
+      
+      const averagePercentage = validCategories > 0 ? totalPercentage / validCategories : 0;
+      const overallBar = document.querySelector('.overall .progress-bar');
+      
+      if (overallBar) {
+          overallBar.style.width = `${averagePercentage}%`;
+          overallBar.setAttribute('data-percentage', averagePercentage.toFixed(0));
+      }
+  }
+
+  document.addEventListener('submit', function(e) {
+      if (e.target.matches('#budget-form')) {
+          e.preventDefault();
+          const form = e.target;
+          const isNewBudget = form.action.includes('create-budget');
+          
+          fetch(form.action, {
+              method: 'POST',
+              body: new FormData(form),
+              headers: {
+                  'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                  'Accept': 'application/json'
+              }
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  document.getElementById('budgetModal').style.display = 'none';
+                  updateProgressBars(data.budget, isNewBudget);
+                  
+                  // Show toast notification instead of alert
+                  showToast('Budget saved successfully!', 'success');
+              } else {
+                  showToast('Error: ' + Object.values(data.errors).join(' '), 'error');
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              showToast('An error occurred while saving', 'error');
+          });
+      }
+  });
+
+  // Helper function for toast notifications
+  function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+          toast.remove();
+      }, 3000);
+  }
 
   document.addEventListener('DOMContentLoaded', function() {
     // Parse data from Django
@@ -560,36 +659,45 @@ function closeModal() {
     chartManager.initBalanceIndicator();      // Balance styling
 
     // Handle form submission
-    document.addEventListener('submit', function(e) {
-        if (e.target.matches('#budget-form')) {
-            e.preventDefault();
+    const budgetForm = document.getElementById('budget-form');
+    if (budgetForm) {
+        budgetForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // This is crucial to stop page reload
+            
             const form = e.target;
+            const isNewBudget = form.action.includes('create-budget');
             const formData = new FormData(form);
             
             fetch(form.action, {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'Accept': 'application/json'
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
-                    // Close the modal
+                    // Close modal and update UI
                     document.getElementById('budgetModal').style.display = 'none';
-                    // Optionally refresh the page or update the UI
-                    window.location.reload();
+                    updateProgressBars(data.budget, isNewBudget);
+                    
+                    // Optional: Show success message
+                    console.log('Budget saved successfully!', data.budget);
                 } else {
-                    // Show validation errors
-                    alert('Error saving budget: ' + (data.errors || 'Unknown error'));
+                    console.error('Save failed:', data.errors);
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred while saving');
             });
-        }
-    });
+        });
+    }
   });
 </script>

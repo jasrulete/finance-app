@@ -55,25 +55,32 @@ def check_budget_exists(request):
 @never_cache
 @login_required
 def create_budget(request):
-    try:
-        # Check if budget already exists for this user
-        Budget.objects.get(user=request.user)
-        # If it exists, redirect to edit
-        return redirect('finance:edit-budget-form', budget_id=request.user.budget.id)
-    except Budget.DoesNotExist:
-        if request.method == 'POST':
-            form = BudgetForm(request.POST)
-            if form.is_valid():
-                budget = form.save(commit=False)
-                budget.user = request.user
-                budget.month = datetime.now().date()  # Set current month
-                budget.save()
-                return JsonResponse({'success': True})
-            else:
-                return JsonResponse({'success': False, 'errors': form.errors}, status=400)
-        else:
-            form = BudgetForm()
-            return render(request, 'dashboard/edit_budget_form.html', {'form': form})
+    if request.method == 'POST':
+        form = BudgetForm(request.POST)
+        if form.is_valid():
+            budget = form.save(commit=False)
+            budget.user = request.user
+            budget.month = datetime.now().date()
+            budget.save()
+            return JsonResponse({
+                'success': True,
+                'budget': {
+                    'bills': float(budget.bills),
+                    'grocery': float(budget.grocery),
+                    'food': float(budget.food),
+                    'health': float(budget.health),
+                    'eatingout': float(budget.eatingout),
+                    'transportation': float(budget.transportation),
+                    'gifts': float(budget.gifts),
+                }
+            })
+        return JsonResponse({
+            'success': False,
+            'errors': form.errors
+        }, status=400)
+    else:
+        form = BudgetForm()
+        return render(request, 'dashboard/edit_budget_form.html', {'form': form})
 
 @never_cache
 @login_required
@@ -84,9 +91,23 @@ def edit_budget(request, budget_id):
         form = BudgetForm(request.POST, instance=budget)
         if form.is_valid():
             form.save()
-            return JsonResponse({'success': True})  # For AJAX success
+            return JsonResponse({
+                'success': True,
+                'budget' : {
+                    'bills': float(budget.bills),
+                    'grocery': float(budget.grocery),
+                    'food': float(budget.food),
+                    'health': float(budget.health),
+                    'eatingout': float(budget.eatingout),
+                    'transportation': float(budget.transportation),
+                    'gifts': float(budget.gifts),
+                },
+            })
         else:
-            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+            return JsonResponse({
+                'success': False, 
+                'errors': form.errors
+            }, status=400)
 
     else:  # GET request
         form = BudgetForm(instance=budget)
