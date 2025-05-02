@@ -69,7 +69,7 @@ def create_budget(request):
                     'grocery': float(budget.grocery),
                     'food': float(budget.food),
                     'health': float(budget.health),
-                    'eatingout': float(budget.eatingout),
+                    'eating-out': float(budget.eatingout),
                     'transportation': float(budget.transportation),
                     'gifts': float(budget.gifts),
                 }
@@ -98,7 +98,7 @@ def edit_budget(request, budget_id):
                     'grocery': float(budget.grocery),
                     'food': float(budget.food),
                     'health': float(budget.health),
-                    'eatingout': float(budget.eatingout),
+                    'eating-out': float(budget.eatingout),
                     'transportation': float(budget.transportation),
                     'gifts': float(budget.gifts),
                 },
