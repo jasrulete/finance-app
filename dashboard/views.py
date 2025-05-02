@@ -14,14 +14,13 @@ def dashboard_view(request):
     current_month = now().month
     current_year = now().year
 
-    # Print basic info
     print(f"\n=== Dashboard Data for {user} (Month: {current_month}/{current_year}) ===")
 
-    # entries for the current month and year
+    # Current month entries
     entries = Entry.objects.filter(user=user, date__year=current_year, date__month=current_month)
     print(f"\nAll entries for this month: {entries.count()} records")
 
-    # Totals
+    # Current month totals
     total_income = entries.filter(entry_type='income').aggregate(total=Sum('amount'))['total'] or 0
     total_expenses = entries.filter(entry_type='expense').aggregate(total=Sum('amount'))['total'] or 0
     balance = total_income - total_expenses
@@ -31,7 +30,16 @@ def dashboard_view(request):
     print(f"Expenses: {total_expenses}")
     print(f"Balance: {balance}")
 
-    # Expense categories
+    # Annual totals for the current year
+    year_entries = Entry.objects.filter(user=user, date__year=current_year)
+    annual_income = year_entries.filter(entry_type='income').aggregate(total=Sum('amount'))['total'] or 0
+    annual_expenses = year_entries.filter(entry_type='expense').aggregate(total=Sum('amount'))['total'] or 0
+
+    print("\n=== ANNUAL TOTALS ===")
+    print(f"Annual Income: {annual_income}")
+    print(f"Annual Expenses: {annual_expenses}")
+
+    # Expense categories (for current month)
     expense_by_category = entries.filter(entry_type='expense').values('category__name').annotate(total=Sum('amount'))
     print("\n=== EXPENSE CATEGORIES ===")
     for item in expense_by_category:
@@ -83,6 +91,9 @@ def dashboard_view(request):
         'total_income': total_income,
         'total_expenses': total_expenses,
         'balance': balance,
+        'annual_income': annual_income,
+        'annual_expenses': annual_expenses,
+        'current_year': current_year,
         'categories': json.dumps([item['category__name'] or 'Uncategorized' for item in expense_by_category]),
         'amounts': json.dumps([float(item['total']) for item in expense_by_category]),
         'months': json.dumps(all_months),
