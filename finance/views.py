@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Entry, Category, Budget
-from .forms import EntryForm, BudgetForm
+from .models import Entry, Category
+from .forms import EntryForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.core.paginator import Paginator
@@ -41,80 +41,6 @@ def transaction(request):
         'income_page': income_page,
         'expense_page': expense_page,
     })
-
-@require_GET
-@login_required
-def check_budget_exists(request):
-    try:
-        budget = Budget.objects.get(user=request.user)
-        return JsonResponse({
-            'exists': True,
-            'budget_id': budget.id,
-            'month': budget.month.strftime('%Y-%m')
-        })
-    except Budget.DoesNotExist:
-        return JsonResponse({'exists': False})
-    
-@never_cache
-@login_required
-def create_budget(request):
-    if request.method == 'POST':
-        form = BudgetForm(request.POST)
-        if form.is_valid():
-            budget = form.save(commit=False)
-            budget.user = request.user
-            budget.month = datetime.now().date()
-            budget.save()
-            return JsonResponse({
-                'success': True,
-                'budget': {
-                    'bills': float(budget.bills),
-                    'grocery': float(budget.grocery),
-                    'food': float(budget.food),
-                    'health': float(budget.health),
-                    'eating-out': float(budget.eatingout),
-                    'transportation': float(budget.transportation),
-                    'gifts': float(budget.gifts),
-                }
-            })
-        return JsonResponse({
-            'success': False,
-            'errors': form.errors
-        }, status=400)
-    else:
-        form = BudgetForm()
-        return render(request, 'dashboard/edit_budget_form.html', {'form': form})
-
-@never_cache
-@login_required
-def edit_budget(request, budget_id):
-    budget = get_object_or_404(Budget, id=budget_id, user=request.user)
-
-    if request.method == 'POST':
-        form = BudgetForm(request.POST, instance=budget)
-        if form.is_valid():
-            form.save()
-            return JsonResponse({
-                'success': True,
-                'budget' : {
-                    'bills': float(budget.bills),
-                    'grocery': float(budget.grocery),
-                    'food': float(budget.food),
-                    'health': float(budget.health),
-                    'eating-out': float(budget.eatingout),
-                    'transportation': float(budget.transportation),
-                    'gifts': float(budget.gifts),
-                },
-            })
-        else:
-            return JsonResponse({
-                'success': False, 
-                'errors': form.errors
-            }, status=400)
-
-    else:  # GET request
-        form = BudgetForm(instance=budget)
-        return render(request, 'dashboard/edit_budget_form.html', {'form': form})
 
 @never_cache
 @login_required
