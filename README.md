@@ -24,7 +24,7 @@ A web application to help users manage their income, expense, and financial goal
 3) **Transactions**
    - Add, edit, or delete income/expense entries.
    - Categorize transactions (e.g., Bills, Grocery, Salary, Bonus)
-5) **Reports**
+4) **Reports**
    - Generate your financial overview.
    - Filter transactions by date or category
    
@@ -33,22 +33,18 @@ A web application to help users manage their income, expense, and financial goal
    - *New Users*: Click "Sign Up" and fill in your username, email, and password.
    - *Existing Users*: Click "Log In" and enter your credentials.
 2. **Dashboard View**
-   - After logging in, the dashboard displays:
-     > *Total Income*
-     > *Total Balance*
-     > *Remaining Balance*
-     > *Financial Overview*
+   - After logging in, the dashboard displays: *Total Income*, *Total Balance*, *Remaining Balance*, *Financial Overview*
 3. **Adding a Transaction**
    - Go to *Expenses* page through the sidebar navigation.
    - Navigate to the "Add an Entry" section.
    - Select Income or Expense.
    - Fill in: Title, Category, Date, Amount, Notes (optional)
    - Click **"Add Entry"**
-5. **Editing or Deleting Transactions**
+4. **Editing or Deleting Transactions**
    - On the *Transactions* page:
-     > Click the **Edit**(✏️) icon to update a transaction.
-     > Click the **Delete**(🗑️) icon to remove a transaction.
-7. **Generating Reports**
+     - Click the **Edit** (✏️) icon to modify a transaction.
+     - Click the **Delete** (🗑️) icon to remove a transaction.
+5. **Generating Reports**
    - Go to *Export* page through the sidebar navigation.
    - Select a date range, type, and/or category.
    - Click *"Generate Report"* to download financial data.
