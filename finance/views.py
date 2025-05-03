@@ -4,7 +4,7 @@ from .forms import EntryForm, BudgetForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.core.paginator import Paginator
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET
 from django.db.models import Q
 from datetime import datetime
