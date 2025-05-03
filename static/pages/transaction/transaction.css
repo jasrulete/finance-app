@@ -6,6 +6,18 @@
   font-family: "K2D", sans-serif;
 }
 
+html,
+body {
+  height: 100%;
+}
+
+.header,
+.main-content,
+.transactions-card {
+  min-width: unset;
+  width: 100%;
+}
+
 /* ========== Header ========== */
 .header {
   display: flex;
@@ -15,7 +27,6 @@
   padding: 20px;
   background-color: var(--secondary);
   border-bottom: 1px solid var(--primary);
-  min-width: 553px;
 }
 
 .header a {
@@ -75,10 +86,8 @@
   padding: 20px;
   background-color: var(--secondary);
   height: auto;
-  min-height: 100vh;
   width: 250px;
   left: -250px;
-  text-decoration: none;
 }
 
 .sidebar a {
@@ -87,6 +96,15 @@
 
 .sidebar.active {
   transform: translateX(0px); /* Slide in from the left */
+  height: 100%;
+}
+
+#sidebar-toggle {
+  color: var(--white);
+  font-size: 2rem;
+  margin-right: 10px;
+  cursor: pointer;
+  display: none; /* Hide on desktop */
 }
 
 .menu-item {
@@ -117,7 +135,7 @@
   flex-direction: column;
   padding: 20px 40px;
   background-color: var(--primary);
-  height: 100%;
+  height: max-content;
   min-height: 100vh;
   width: calc(100% - 250px);
 }
@@ -180,7 +198,7 @@ table {
   border-collapse: collapse;
   background-color: var(--secondary);
   border-radius: 10px;
-  overflow: hidden;
+  overflow-x: auto;
 }
 
 th,
@@ -411,25 +429,36 @@ td {
 /* ========== Responsive ========== */
 @media (max-width: 828px) {
   .sidebar {
-    position: fixed; /* Fixed position so it overlays content */
     left: 0;
-    height: 100vh; /* Full viewport height */
+    height: 100%;
     z-index: 1000; /* High z-index to ensure it's on top */
     transform: translateX(-250px); /* Hidden by default */
     transition: transform 0.3s ease; /* Smooth transition */
+  }
+
+  .user-info {
+    padding-right: 0;
+  }
+
+  .header {
+    justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+    /* min-width: 620px; */
+    height: max-content;
   }
 
   .sidebar.active {
     transform: translateX(0px); /* Slide in from the left */
   }
 
-  .main-content {
-    width: 100%;
-    min-width: 620px;
+  #sidebar-toggle {
+    display: inline; /* Show on mobile */
   }
 
-  .transactions-card {
-    min-width: 553px;
+  .main-content {
+    width: 100%; /* Full width when sidebar is hidden */
+    height: max-content;
   }
 
   .add-entry-button {
@@ -443,8 +472,121 @@ td {
   .modal-content {
     max-width: 90%;
   }
+}
+
+@media (max-width: 550px) {
+  .logo-img {
+    height: 40px;
+  }
 
   .header {
-    min-width: 620px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: max-content;
+  }
+
+  .logo-text {
+    font-size: 1.2rem;
+  }
+
+  .avatar-image {
+    height: 40px;
+    width: 40px;
+  }
+
+  .user-name {
+    font-size: 1.2rem;
+  }
+
+  .logout-link {
+    font-size: 1rem;
+  }
+
+  .welcome-message h1 {
+    font-size: 2rem;
+  }
+
+  .welcome-message p {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo-text {
+    font-size: 1.2rem;
+  }
+
+  /* Sidebar collapses completely on mobile */
+  .sidebar {
+    position: absolute;
+    /* top: 70px; */
+    left: 0;
+    height: 100%;
+    width: 200px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+    height: 100%;
+  }
+
+  #sidebar-toggle {
+    display: inline-block;
+  }
+
+  /* Main content spans full width on small screens */
+  .main-content {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  /* Table responsiveness */
+  .transactions-card {
+    overflow-x: auto;
+  }
+
+  thead {
+    background-color: var(--secondary);
+    flex-direction: row;
+  }
+
+  tr {
+    margin-bottom: 1rem;
+    /* background: var(--record-card); */
+    border-radius: 8px;
+    /* padding: 1rem;; */
+  }
+
+  td {
+    position: relative;
+    font-size: 0.9rem;
+  }
+
+  td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 1rem;
+    width: 45%;
+    /* padding-right: 10px; */
+    font-weight: bold;
+    text-align: left;
+    color: var(--light-primary);
+  }
+
+  .actions {
+    justify-content: flex-end;
+  }
+
+  .add-entry-button {
+    width: 100%;
+    padding: 0.8rem;
+  }
+
+  .modal-content {
+    padding: 1rem;
   }
 }

@@ -26,6 +26,7 @@
   <body>
     <!-- Header -->
     <header class="header" role="banner">
+      <span id="sidebar-toggle" class="material-icons">menu</span>
       <a href="{% url 'dashboard' %}">
         <div class="logo">
           <div class="logo-icon">
@@ -88,12 +89,14 @@
           <h1>Transactions</h1>
           <p>Easily review and manage your financial history.</p>
         </div>
-        <br>
-        {% comment %} <div class="add-entry-container">
+        <br />
+        {% comment %}
+        <div class="add-entry-container">
           <button class="add-entry-button" onclick="openEntryModalForCreate()">
             + Add Entry
           </button>
-        </div> {% endcomment %}
+        </div>
+        {% endcomment %}
 
         <!-- Income Block -->
         <div class="transactions-card">
@@ -131,7 +134,7 @@
                 </td>
               </tr>
               {% empty %}
-              <tr>
+              <tr class="no-entry">
                 <td colspan="6">No income entries found.</td>
               </tr>
               {% endfor %}
@@ -192,7 +195,7 @@
                 </td>
               </tr>
               {% empty %}
-              <tr>
+              <tr class="no-entry">
                 <td colspan="6">No expense entries found.</td>
               </tr>
               {% endfor %}
@@ -292,17 +295,17 @@
         }
       };
 
-      document.addEventListener('change', function (e) {
-        if (e.target && e.target.id === 'id_entry_type') {
+      document.addEventListener("change", function (e) {
+        if (e.target && e.target.id === "id_entry_type") {
           const entryType = e.target.value;
-          console.log("Selected Entry Type:", entryType);  // 👈 Debug log
+          console.log("Selected Entry Type:", entryType); // 👈 Debug log
           fetch(`/finance/get-categories/?entry_type=${entryType}`)
-            .then(response => response.json())
-            .then(data => {
-              const categorySelect = document.getElementById('id_category');
+            .then((response) => response.json())
+            .then((data) => {
+              const categorySelect = document.getElementById("id_category");
               categorySelect.innerHTML = '<option value="">---------</option>';
-              data.categories.forEach(cat => {
-                const option = document.createElement('option');
+              data.categories.forEach((cat) => {
+                const option = document.createElement("option");
                 option.value = cat.id;
                 option.textContent = cat.name;
                 categorySelect.appendChild(option);
@@ -310,16 +313,18 @@
             });
         }
       });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const toggle = document.getElementById("sidebar-toggle");
+        const sidebar = document.querySelector(".sidebar");
 
-
-      {% comment %} document.addEventListener("DOMContentLoaded", () => {
-        document.querySelectorAll(".calc-pad button").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const amountInput = document.querySelector("#id_amount");
-            if (amountInput) amountInput.value += btn.textContent;
+        if (toggle && sidebar) {
+          toggle.addEventListener("click", () => {
+            sidebar.classList.toggle("active");
           });
-        });
-      }); {% endcomment %}
+        }
+      });
     </script>
   </body>
 </html>
