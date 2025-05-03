@@ -600,7 +600,7 @@
   }
 
 // Update form submission handler to use the simple input
-document.getElementById('entry-form').addEventListener('submit', async function(e) {
+{% comment %} document.getElementById('entry-form').addEventListener('submit', async function(e) {
   e.preventDefault();
   
   // Validate required fields
@@ -659,7 +659,7 @@ document.getElementById('entry-form').addEventListener('submit', async function(
       console.error('Error:', error);
       showErrorMessage('An error occurred while adding the entry');
   }
-});
+}); {% endcomment %}
 
 // Type buttons functionality
 document.getElementById('income-btn').addEventListener('click', function() {
