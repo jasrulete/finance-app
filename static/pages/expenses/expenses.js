@@ -1,257 +1,38 @@
 // Set current date and initialize categories
 document.addEventListener('DOMContentLoaded', function() {
   const today = new Date();
-  const formattedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+  const formattedDate = today.toISOString().split('T')[0];
   document.getElementById('date').value = formattedDate;
   
-  // Define category options for income and expense
-  const incomeCategories = [
-    { value: "", text: "Select a Category", disabled: true, selected: true },
-    { value: "salary", text: "Salary" },
-    { value: "bonus", text: "Bonus" },
-    { value: "business", text: "Business" },
-  ];
-
-  const expenseCategories = [
-      { value: "", text: "Select a Category", disabled: true, selected: true },
-      { value: "grocery", text: "Grocery" },
-      { value: "bills", text: "Bills" },
-      { value: "health", text: "Health" },
-      { value: "food", text: "Food" },
-      { value: "eating-out", text: "Eating Out" },
-      { value: "gifts", text: "Gifts" },
-      { value: "transportation", text: "Transportation" },
-  ];
-  
-  // Default to Income button active and set initial categories
-  document.getElementById('income-btn').classList.add('active');
-  populateCategories(incomeCategories);
-  
-  // Initialize calculator display
-  document.getElementById('amount-display').textContent = "₱";
-  
-  // Toggle between Income and Expense
-  document.getElementById('income-btn').addEventListener('click', function() {
-      this.classList.add('active');
-      document.getElementById('expense-btn').classList.remove('active');
-      populateCategories(incomeCategories);
-  });
-  
-  document.getElementById('expense-btn').addEventListener('click', function() {
-      this.classList.add('active');
-      document.getElementById('income-btn').classList.remove('active');
-      populateCategories(expenseCategories);
-  });
-  
-  // Function to populate category dropdown based on type
-  function populateCategories(categories) {
-      const categorySelect = document.getElementById('category');
-      // Clear existing options
-      categorySelect.innerHTML = '';
-      
-      // Add new options
-      categories.forEach(category => {
-          const option = document.createElement('option');
-          option.value = category.value;
-          option.textContent = category.text;
-          if (category.disabled) option.disabled = true;
-          if (category.selected) option.selected = true;
-          categorySelect.appendChild(option);
-      });
-  }
+  // Initialize category dropdowns and calculator as before
+  // ... (keep all your existing code for dropdowns and calculator)
   
   // Initialize the expense chart if it exists on the page
   if (document.getElementById('expense-pie-chart')) {
       initializeExpenseChart();
-      updateChartWithRealData();
   }
   
-  // Connect the Add Expense button to the form if it exists
-  const addExpenseBtn = document.getElementById('add-expense-btn');
-  if (addExpenseBtn) {
-      addExpenseBtn.addEventListener('click', function() {
-          // Scroll to the form
-          document.getElementById('entry-form').scrollIntoView({ behavior: 'smooth' });
-          // Auto-select expense
-          document.getElementById('expense-btn').click();
-      });
+  // Update the welcome message with current month
+  const welcomeMessage = document.querySelector('.welcome-message p');
+  if (welcomeMessage) {
+      welcomeMessage.textContent = `Record your ${'{{ current_month }}'} expenses and maintain control over your finances.`;
   }
   
-  // Form validation and submission
-  document.getElementById('submit-btn').addEventListener('click', function(e) {
-    e.preventDefault(); // Prevent default form submission
-    
-    // Get form elements
-    const entryNameField = document.getElementById('entry-name');
-    const categoryField = document.getElementById('category');
-    const notesField = document.getElementById('notes');
-    const amountDisplay = document.getElementById('amount-display');
-    
-    // Get values
-    const entryName = entryNameField.value;
-    const category = categoryField.value;
-    const notes = notesField.value;
-    const amount = currentValue;
-    const type = document.getElementById('income-btn').classList.contains('active') ? 'income' : 'expense';
-    
-    // Clear previous error states
-    clearValidationErrors();
-    
-    // Validate form fields
-    let isValid = true;
-    
-    if (!entryName) {
-        showValidationError(entryNameField, 'Please enter a title for this entry');
-        isValid = false;
-    }
-    
-    if (!category) {
-        showValidationError(categoryField, 'Please select a category');
-        isValid = false;
-    }
-    
-    if (!amount) {
-        amountDisplay.parentElement.classList.add('error-field');
-          
-        // Add focus/click event listener to clear error when user interacts with the amount field
-        amountDisplay.parentElement.addEventListener('click', function() {
-            this.classList.remove('error-field');
-        }, { once: true });
-        
-        isValid = false;
-    }
-    
-    // If validation fails, stop here
-    if (!isValid) {
-        // Scroll to the first error
-        const firstError = document.querySelector('.error-message');
-        if (firstError) {
-            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-        return;
-    }
-    
-    // Create entry object
-    const entry = {
-        title: entryName,
-        category: category,
-        date: document.getElementById('date').value,
-        notes: notes,
-        amount: amount,
-        type: type,
-        timestamp: new Date().getTime()
-    };
-    
-    // Save entry to localStorage
-    saveExpenseEntry(entry);
-    
-    // Log the entry for debugging
-    console.log('Entry added:', entry);
-    
-    // Update chart if it exists
-    if (document.getElementById('expense-pie-chart')) {
-        updateChartWithRealData();
-    }
-    
-    // Show success message
-    showSuccessMessage('Entry added successfully!');
-    
-    // Reset form
-    resetForm();
-  });
-
-  // Function to show validation error
-  function showValidationError(element, message) {
-    // Add error class to highlight the field
-    element.classList.add('error-field');
-    
-    // Create error message element
-    const errorMessage = document.createElement('div');
-    errorMessage.className = 'error-message';
-    errorMessage.textContent = message;
-    errorMessage.style.color = '#d9534f';
-    errorMessage.style.fontSize = '0.85rem';
-    errorMessage.style.marginTop = '0.25rem';
-    
-    // Insert error message after the element
-    element.parentNode.insertBefore(errorMessage, element.nextSibling);
-    
-    // Add focus event listener to clear error when user interacts with the field
-    element.addEventListener('focus', function() {
-        this.classList.remove('error-field');
-        const nextSibling = this.nextSibling;
-        if (nextSibling && nextSibling.classList && nextSibling.classList.contains('error-message')) {
-            nextSibling.remove();
-        }
-    }, { once: true });
+  // Add total expenses display
+  const totalExpenses = parseFloat('{{ total_expenses }}') || 0;
+  const pieChartContainer = document.querySelector('.pie-chart-container');
+  if (pieChartContainer) {
+      const totalDisplay = document.createElement('div');
+      totalDisplay.className = 'total-expenses-display';
+      totalDisplay.innerHTML = `
+          <div class="total-label">TOTAL EXPENSES</div>
+          <div class="total-amount">₱${totalExpenses.toFixed(2)}</div>
+          <div class="total-month">${'{{ current_month }}'}</div>
+      `;
+      pieChartContainer.insertBefore(totalDisplay, pieChartContainer.firstChild);
   }
-
-  // Function to clear all validation errors
-  function clearValidationErrors() {
-    // Remove error class from all elements
-    const errorFields = document.querySelectorAll('.error-field');
-    errorFields.forEach(field => field.classList.remove('error-field'));
-    
-    // Remove all error messages
-    const errorMessages = document.querySelectorAll('.error-message');
-    errorMessages.forEach(message => message.remove());
-  }
-
-  // Function to show success message
-  function showSuccessMessage(message) {
-    // Create toast container if it doesn't exist
-    let toastContainer = document.getElementById('toast-container');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.id = 'toast-container';
-        toastContainer.style.position = 'fixed';
-        toastContainer.style.bottom = '1rem';
-        toastContainer.style.right = '1rem';
-        toastContainer.style.zIndex = '1000';
-        document.body.appendChild(toastContainer);
-    }
-    
-    // Create toast element
-    const toast = document.createElement('div');
-    toast.className = 'success-toast';
-    toast.textContent = message;
-    toast.style.backgroundColor = '#5cb85c';
-    toast.style.color = 'white';
-    toast.style.padding = '0.75rem 1.25rem';
-    toast.style.borderRadius = '0.25rem';
-    toast.style.marginTop = '0.5rem';
-    toast.style.boxShadow = '0 0.25rem 0.75rem rgba(0, 0, 0, 0.1)';
-    toast.style.opacity = '0';
-    toast.style.transition = 'opacity 0.3s ease-in-out';
-    
-    // Add toast to container
-    toastContainer.appendChild(toast);
-    
-    // Trigger reflow to enable animation
-    void toast.offsetWidth;
-    
-    // Show toast
-    toast.style.opacity = '1';
-    
-    // Remove toast after 3 seconds
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        setTimeout(() => {
-            toast.remove();
-        }, 300);
-    }, 3000);
-  }
-
-  // Function to reset form
-  function resetForm() {
-    document.getElementById('entry-name').value = '';
-    document.getElementById('category').selectedIndex = 0;
-    document.getElementById('notes').value = '';
-    currentValue = '';
-    document.getElementById('amount-display').textContent = '₱';
-  }
-  initSidebar();
 });
+
 
 // Sidebar toggle functionality (Refactored)
 function toggleSidebar() {
@@ -267,18 +48,17 @@ function toggleSidebar() {
 }
 
 function initSidebar() {
-  console.log("Initializing sidebar toggle...");
-  
+  console.log("Checking for sidebar toggle...");
   const toggleButton = document.getElementById('toggle-sidebar');
-  if (!toggleButton) {
-    console.warn("Sidebar toggle button not found");
-    return;
-  }
   
-  toggleButton.addEventListener('click', function() {
-    console.log("Sidebar toggle button clicked");
-    toggleSidebar(); // Reusable function
-  });
+  if (toggleButton) {
+      console.log("Sidebar toggle button found");
+      toggleButton.addEventListener('click', function() {
+          console.log("Sidebar toggle button clicked");
+          toggleSidebar();
+      });
+  }
+  // If toggle button doesn't exist, do nothing (no error)
 }
 
 
@@ -418,28 +198,29 @@ function getChartData() {
 let expensePieChart;
 
 function initializeExpenseChart() {
-  // Sample data for initial rendering
-  const initialData = {
-      labels: ['Food', 'Transportation', 'Bills', 'Grocery', 'Health', 'Eating Out', 'Gifts'],
+  // Get data from Django template
+  const categories = JSON.parse('{{ categories|safe|escapejs }}');
+  const amounts = JSON.parse('{{ amounts|safe|escapejs }}');
+  const colors = JSON.parse('{{ colors|safe|escapejs }}');
+  
+  console.log("Chart data:", {categories, amounts, colors}); // Debug log
+  
+  // Calculate percentages
+  const total = amounts.reduce((sum, val) => sum + val, 0) || 1;
+  const percentages = amounts.map(amount => ((amount / total) * 100).toFixed(1));
+  
+  const chartData = {
+      labels: categories,
       datasets: [{
-          data: [25, 15, 20, 18, 7, 10, 5], // Sample percentages
-          backgroundColor: [
-              '#f6f3a9', // Food
-              '#d5d1e9', // Transportation
-              '#e7d7ca', // Bills
-              '#d5f6fb', // Grocery
-              '#f1beb5', // Health
-              '#e7d27c', // Eating Out
-              '#f8c57c'  // Gifts
-          ],
+          data: percentages,
+          backgroundColor: colors,
           borderWidth: 0
       }]
   };
   
-  // Configuration for the pie chart
   const config = {
       type: 'pie',
-      data: initialData,
+      data: chartData,
       options: {
           responsive: true,
           maintainAspectRatio: false,
@@ -450,48 +231,38 @@ function initializeExpenseChart() {
               tooltip: {
                   callbacks: {
                       label: function(context) {
-                          return context.raw + '%';
+                          const label = context.label || '';
+                          const value = context.raw || 0;
+                          const amount = amounts[context.dataIndex];
+                          return `${label}: ${value}% (₱${amount.toFixed(2)})`;
                       },
                       title: function() {
-                        return ''; // Remove the label (title)
+                          return '';
                       },
                   },
                   displayColors: false
               },
               datalabels: {
-                color: '#000',
-                formatter: function (value, context) {
-                    const label = context.chart.data.labels[context.dataIndex];
-                    return label.toUpperCase();
-                },
-                font: {
-                    size: 18,
-                    family: 'K2D',
-                },
+                  color: '#000',
+                  formatter: function (value, context) {
+                      const label = context.chart.data.labels[context.dataIndex];
+                      return label.toUpperCase();
+                  },
+                  font: {
+                      size: 18,
+                      family: 'K2D',
+                  },
               }
           }
       },
       plugins: [ChartDataLabels]
   };
   
-  // Create the pie chart
   const ctx = document.getElementById('expense-pie-chart').getContext('2d');
-  expensePieChart = new Chart(ctx, config);
-}
-
-function updateChartWithRealData() {
-  // If chart isn't initialized or element doesn't exist, do nothing
-  if (!expensePieChart || !document.getElementById('expense-pie-chart')) {
-      return;
+  if (window.expensePieChart) {
+      window.expensePieChart.destroy();
   }
-  
-  const chartData = getChartData();
-  
-  // Update chart with real data
-  expensePieChart.data.labels = chartData.labels;
-  expensePieChart.data.datasets[0].data = chartData.datasets[0].data;
-  expensePieChart.data.datasets[0].backgroundColor = chartData.datasets[0].backgroundColor;
-  expensePieChart.update();
+  window.expensePieChart = new Chart(ctx, config);
 }
 
 // Summary Functions

@@ -5,10 +5,13 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse
+from django.urls import reverse
 from django.views.decorators.http import require_GET
-from django.db.models import Q
+from django.db.models import Q, Sum
 from datetime import datetime, timedelta
+from django.utils.timezone import now
 import csv
+import json
 
 #!-- Commented out to avoid circular import issues --!#
 # @never_cache 
@@ -124,10 +127,21 @@ def entry_create(request):
             entry = form.save(commit=False)
             entry.user = request.user
             entry.save()
+            
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': True,
+                    'redirect_url': reverse('finance:entry-list')
+                })
             return redirect('finance:entry-list')
-    else:
-        form = EntryForm(user=request.user)
-    return render(request, 'finance/entry_form.html', {'form': form})
+        else:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Invalid form data',
+                    'errors': form.errors.as_json()
+                }, status=400)
+            return render(request, 'finance/entry_form.html', {'form': form})
 
 @never_cache
 @login_required
@@ -261,4 +275,56 @@ def export_entries(request):
 @never_cache
 @login_required
 def expenses_page(request):
-    return render(request, 'finance/expenses.html')
+    user = request.user
+    current_month = now().month
+    current_year = now().year
+    
+    # Get current month expenses
+    expenses = Entry.objects.filter(
+        user=user,
+        entry_type='expense',
+        date__year=current_year,
+        date__month=current_month
+    )
+    
+    # Calculate total expenses for the month
+    total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
+    
+    # Group expenses by category
+    expense_by_category = expenses.values('category__name').annotate(
+        total=Sum('amount')
+    ).order_by('-total')
+    
+    # Prepare data for the chart
+    categories = []
+    amounts = []
+    colors = []
+    
+    # Define colors for each category
+    category_colors = {
+        'Bills': '#e7d7ca',
+        'Grocery': '#d5f6fb',
+        'Food': '#f6f3a9',
+        'Health': '#f1beb5',
+        'Eating Out': '#e7d27c',
+        'Transportation': '#d5d1e9',
+        'Gifts': '#f8c57c',
+        'Other': '#cccccc'
+    }
+    
+    for item in expense_by_category:
+        category_name = item['category__name'] or 'Other'
+        categories.append(category_name)
+        amounts.append(float(item['total']))
+        colors.append(category_colors.get(category_name, '#cccccc'))
+    
+    context = {
+        'total_expenses': total_expenses,
+        'categories': categories,  # Pass as regular list
+        'amounts': amounts,       # Pass as regular list
+        'colors': colors,         # Pass as regular list
+        'current_month': now().strftime("%B %Y"),
+        'expense_by_category': expense_by_category,
+    }
+    
+    return render(request, 'finance/expenses.html', context)
