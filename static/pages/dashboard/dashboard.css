@@ -563,27 +563,20 @@ h2 {
 }
 
 @media (max-width: 828px) {
-    .sidebar {
-        position: fixed; /* Fixed position so it overlays content */
-        top: 150px;
-        left: 0;
-        height: 100vh; /* Full viewport height */
-        z-index: 1000; /* High z-index to ensure it's on top */
-        transform: translateX(-250px); /* Hidden by default */
-        transition: transform 0.3s ease; /* Smooth transition */
+    .header {
+        min-width: auto;
     }
 
-    .header{
-        min-width: 620px;
+    .container {
+        flex-direction: column;
     }
-    
-    .sidebar.active {
-        transform: translateX(0); /* Slide in when active */
+
+    .sidebar {
+        width: 100%;
     }
     
     .main-content {
-        width: 100%; /* Full width when sidebar is hidden */
-        min-width: 620px; /* Minimum width to prevent overflow */
+        width: 100%;
     }
 
     .overview-container h2 {
