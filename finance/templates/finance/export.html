@@ -85,36 +85,77 @@
             {% if error %}
             <p style="color: red;">{{ error }}</p>
             {% endif %}
-          <form method="POST">
+          <form method="POST" id="exportForm">
             {% csrf_token %}
-            <label class= "label">File Name</label>
-            <input type="text" name="filename" placeholder="e.g. my_transactions" />
+            <label class="label">File Name</label>
+            <input type="text" name="filename" placeholder="e.g. my_transactions" value="my_transactions_{{ current_date|date:'Ymd' }}" />
   
-            <label class= "label">Date Range</label>
+            <label class="label">Date Range</label>
             <div class="date-range">
-              <input type="date" name="start_date" />
+              <input type="date" name="start_date" id="start_date" value="{{ start_date|date:'Y-m-d' }}" />
               <span>to</span>
-              <input type="date" name="end_date" />
+              <input type="date" name="end_date" id="end_date" value="{{ end_date|date:'Y-m-d' }}" />
             </div>
   
-            <label class= "label">Type</label>
+            <label class="label">Type</label>
             <div class="type-buttons">
-              <input type="radio" name="entry_type" value="income" id="income" /><label for="income">Income</label>
-              <input type="radio" name="entry_type" value="expense" id="expense" /><label for="expense">Expense</label>
-              <input type="radio" name="entry_type" value="" id="all" checked /><label for="all">All</label>
+              <input type="radio" name="entry_type" value="income" id="income" {% if entry_type == 'income' %}checked{% endif %} />
+              <label for="income">Income</label>
+              <input type="radio" name="entry_type" value="expense" id="expense" {% if entry_type == 'expense' %}checked{% endif %} />
+              <label for="expense">Expense</label>
+              <input type="radio" name="entry_type" value="" id="all" {% if not entry_type %}checked{% endif %} />
+              <label for="all">All</label>
             </div>
   
-            <label class= "label">Category</label>
+            <label class="label">Category</label>
             <select name="category" id="category-select">
               <option value="">Select Category</option>
               {% for cat in categories %}
-                <option value="{{ cat.id }}">{{ cat.name }}</option>
+                <option value="{{ cat.id }}" {% if category_id == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
               {% endfor %}
             </select>
   
             <button type="submit" class="export-btn">Export</button>
+            <button type="button" class="preview-btn" id="previewBtn">Preview Data</button>
           </form>
         </div>
+
+        <!-- Preview Section -->
+        <div class="preview-section" id="previewSection" style="display: none;">
+          <h2>Preview Data</h2>
+          <div class="transaction-summary">
+            <div class="summary-item">
+              <span class="summary-label">Total Transactions:</span>
+              <span class="summary-value" id="totalTransactions">0</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Total Income:</span>
+              <span class="summary-value" id="totalIncome">$0.00</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Total Expenses:</span>
+              <span class="summary-value" id="totalExpenses">$0.00</span>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="transaction-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Category</th>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="transactionData">
+                <!-- Will be populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
     <script>
         const startInput = document.querySelector('input[name="start_date"]');
@@ -129,31 +170,81 @@
         
         startInput.addEventListener("change", validateDates);
         endInput.addEventListener("change", validateDates);
-    </script>
-    <script>
-      // Dynamic category filtering based on entry type
-      document.querySelectorAll('input[name="entry_type"]').forEach((radio) => {
-        radio.addEventListener("change", function () {
-          const entryType = this.value;
-          const categorySelect = document.getElementById("category-select");
-    
-          // Fetch filtered categories
-          fetch(`/finance/get-categories/?entry_type=${entryType}`)
-            .then((response) => response.json())
-            .then((data) => {
-              // Clear existing options
-              categorySelect.innerHTML = '<option value="">Select Category</option>';
-    
-              // Populate new filtered categories
-              data.categories.forEach((cat) => {
-                const option = document.createElement("option");
-                option.value = cat.id;
-                option.textContent = cat.name;
-                categorySelect.appendChild(option);
-              });
+
+        // Preview functionality
+        document.getElementById('previewBtn').addEventListener('click', function() {
+            const form = document.getElementById('exportForm');
+            const formData = new FormData(form);
+            
+            fetch('{% url "finance:entry-export" %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest' // To identify AJAX request
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                
+                // Update summary
+                document.getElementById('totalTransactions').textContent = data.entries.length;
+                document.getElementById('totalIncome').textContent = '$' + data.totals.income.toFixed(2);
+                document.getElementById('totalExpenses').textContent = '$' + data.totals.expense.toFixed(2);
+                
+                // Update table
+                const tbody = document.getElementById('transactionData');
+                tbody.innerHTML = '';
+                
+                data.entries.forEach(entry => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${entry.title}</td>
+                        <td>${entry.entry_type}</td>
+                        <td>${entry.category || ''}</td>
+                        <td>${entry.date}</td>
+                        <td class="${entry.entry_type === 'income' ? 'text-success' : 'text-danger'}">
+                            ${entry.entry_type === 'income' ? '+' : '-'}$${entry.amount}
+                        </td>
+                        <td>${entry.notes || ''}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+                
+                // Show preview section
+                document.getElementById('previewSection').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
         });
-      });
+
+        // Dynamic category filtering based on entry type
+        document.querySelectorAll('input[name="entry_type"]').forEach((radio) => {
+            radio.addEventListener("change", function () {
+                const entryType = this.value;
+                const categorySelect = document.getElementById("category-select");
+    
+                // Fetch filtered categories
+                fetch(`/finance/get-categories/?entry_type=${entryType}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        // Clear existing options
+                        categorySelect.innerHTML = '<option value="">Select Category</option>';
+    
+                        // Populate new filtered categories
+                        data.categories.forEach((cat) => {
+                            const option = document.createElement("option");
+                            option.value = cat.id;
+                            option.textContent = cat.name;
+                            categorySelect.appendChild(option);
+                        });
+                    });
+            });
+        });
     </script>
   </body>
 </html>

@@ -1,5 +1,91 @@
 /* export.css */
+/* Preview Section Styles */
+.preview-section {
+  margin-top: 2rem;
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
+.preview-section h2 {
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+.transaction-summary {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.summary-item {
+  text-align: center;
+}
+
+.summary-label {
+  display: block;
+  font-weight: 500;
+  color: #6c757d;
+}
+
+.summary-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transaction-table th, 
+.transaction-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.transaction-table th {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.transaction-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.text-success {
+  color: #28a745;
+}
+
+.text-danger {
+  color: #dc3545;
+}
+
+.preview-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+.preview-btn:hover {
+  background-color: #5a6268;
+}
+
+.export-btn {
+  margin-top: 0.5rem;
+}
 /* Reset */
 * {
   margin: 0;

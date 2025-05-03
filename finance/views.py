@@ -7,7 +7,7 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET
 from django.db.models import Q
-from datetime import datetime
+from datetime import datetime, timedelta
 import csv
 
 #!-- Commented out to avoid circular import issues --!#
@@ -176,8 +176,10 @@ def export_entries(request):
         start_date = request.POST.get("start_date")
         end_date = request.POST.get("end_date")
 
-        # ✅ Early check: end date cannot be before start date
+        # Validate dates
         if start_date and end_date and end_date < start_date:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'error': 'End date cannot be earlier than start date.'})
             categories = Category.objects.filter(user=request.user) | Category.objects.filter(is_default=True)
             return render(request, "finance/export.html", {
                 "categories": categories,
@@ -197,6 +199,36 @@ def export_entries(request):
         if end_date:
             entries = entries.filter(date__lte=end_date)
 
+        # Handle AJAX preview request
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            entries_data = []
+            totals = {
+                'income': 0,
+                'expense': 0
+            }
+            
+            for entry in entries.order_by('-date'):
+                entry_data = {
+                    'title': entry.title,
+                    'entry_type': entry.get_entry_type_display(),
+                    'category': entry.category.name if entry.category else None,
+                    'date': entry.date.strftime('%Y-%m-%d'),
+                    'amount': float(entry.amount),
+                    'notes': entry.notes
+                }
+                entries_data.append(entry_data)
+                
+                if entry.entry_type == 'income':
+                    totals['income'] += float(entry.amount)
+                else:
+                    totals['expense'] += float(entry.amount)
+            
+            return JsonResponse({
+                'entries': entries_data,
+                'totals': totals
+            })
+
+        # Handle regular CSV export
         response = HttpResponse(content_type="text/csv")
         response["Content-Disposition"] = f'attachment; filename="{filename}.csv"'
 
@@ -205,7 +237,7 @@ def export_entries(request):
         for entry in entries:
             writer.writerow([
                 entry.title,
-                entry.entry_type,
+                entry.get_entry_type_display(),
                 entry.category.name if entry.category else "",
                 entry.date,
                 entry.amount,
@@ -214,8 +246,17 @@ def export_entries(request):
 
         return response
 
+    # Set default dates (last 30 days)
+    end_date = datetime.now().date()
+    start_date = end_date - timedelta(days=30)
+    
     categories = Category.objects.filter(user=request.user) | Category.objects.filter(is_default=True)
-    return render(request, "finance/export.html", {"categories": categories})
+    return render(request, "finance/export.html", {
+        "categories": categories,
+        "start_date": start_date,
+        "end_date": end_date,
+        "current_date": datetime.now()
+    })
 
 @never_cache
 @login_required
