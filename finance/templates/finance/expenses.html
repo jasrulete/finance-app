@@ -23,7 +23,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
   </head>
   <body>
+    <!-- Header -->
     <header class="header" role="banner">
+      <span id="sidebar-toggle" class="material-icons">menu</span>
       <a href="{% url 'dashboard' %}">
         <div class="logo">
           <div class="logo-icon">
@@ -179,6 +181,18 @@
         </form>
       </div>
     </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const toggle = document.getElementById("sidebar-toggle");
+        const sidebar = document.querySelector(".sidebar");
+
+        if (toggle && sidebar) {
+          toggle.addEventListener("click", () => {
+            sidebar.classList.toggle("active");
+          });
+        }
+      });
+    </script>
   </body>
 </html>
 {{ categories|json_script:"categories-data" }}
