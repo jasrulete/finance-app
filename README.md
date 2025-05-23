@@ -6,9 +6,9 @@ A web application to help users manage their income, expense, and financial goal
 
 ## Setup Instructions
 1. **Clone the repository**:
-  git clone https://github.com/JATorres-zxc/LE-2-Group-A-1.git
+  git clone https://github.com/jasrulete/finance-app.git
 2. **Navigate to the project directory**:
-  cd LE-2-Group-A-1
+  cd finance-app
 3. **Install the dependencies**:
    pip install -r requirements.txt
 4. **Run the website**:
